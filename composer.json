@@ -1,0 +1,20 @@
+{
+    "name": "metrique/laravel-plonk",
+    "description": "Library for image management in Laravel 5.",
+    "type": "Library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Hudson",
+            "email": "support@shinobicorp.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Metrique\\Plonk\\": "src/"
+        }
+    },
+    "require-dev": {
+        "laravel/framework": "^5.1"
+    }
+}

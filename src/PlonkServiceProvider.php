@@ -4,7 +4,9 @@ namespace Metrique\Plonk;
 
 use Illuminate\Support\ServiceProvider;
 use Metrique\Plonk\Commands\PlonkMigrationsCommand;
+use Metrique\Plonk\Repositories\Contracts\PlonkIndexRepositoryInterface;
 use Metrique\Plonk\Repositories\Contracts\PlonkStoreRepositoryInterface;
+use Metrique\Plonk\Repositories\PlonkIndexRepositoryEloquent;
 use Metrique\Plonk\Repositories\PlonkStoreRepositoryEloquent;
 
 class PlonkServiceProvider extends ServiceProvider

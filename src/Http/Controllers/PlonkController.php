@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use TG\Http\Requests;
 use TG\Http\Controllers\Controller;
 use Metrique\Plonk\Exceptions\PlonkException;
+use Metrique\Plonk\Repositories\Contracts\PlonkIndexRepositoryInterface as PlonkIndexRepository;
 use Metrique\Plonk\Repositories\Contracts\PlonkStoreRepositoryInterface as PlonkStoreRepository;
 use Metrique\Plonk\Http\Requests\PlonkStoreRequest;
 
@@ -23,10 +24,11 @@ class PlonkController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(PlonkIndexRepository $plonk)
     {
-        //
-        return view($this->views['index']);
+        return view($this->views['index'])->with([
+            'assets' => $plonk->paginate(1)
+        ]);
     }
 
     /**

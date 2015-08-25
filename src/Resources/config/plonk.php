@@ -28,7 +28,11 @@ return [
             'originals' => '/originals',
         ]
     ],
-    
+
+    'paginate' => [
+        'items' => 24,
+    ],
+
     'size' => [
         [
             'name' => 'small',

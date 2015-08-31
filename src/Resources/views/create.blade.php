@@ -1,6 +1,7 @@
 @extends('metrique-plonk::master')
 
 @section('content')
+
 <div class="row">	
 	<h1>Plonk</h1>
 	<p>Upload a file...</p>
@@ -42,4 +43,4 @@
 	</div>
 </div>
 
-@stop
+@endsection

@@ -9,7 +9,8 @@ use TG\Http\Controllers\Controller;
 use Metrique\Plonk\Exceptions\PlonkException;
 use Metrique\Plonk\Helpers\FoundationPaginationPresenter;
 use Metrique\Plonk\Http\Requests\PlonkStoreRequest;
-use Metrique\Plonk\Repositories\Contracts\PlonkIndexRepositoryInterface as PlonkIndexRepository;
+use Metrique\Plonk\Http\Requests\PlonkUpdateRequest;
+use Metrique\Plonk\Repositories\Contracts\PlonkRepositoryInterface as PlonkRepository;
 use Metrique\Plonk\Repositories\Contracts\PlonkStoreRepositoryInterface as PlonkStoreRepository;
 
 class PlonkController extends Controller
@@ -17,7 +18,8 @@ class PlonkController extends Controller
     protected $views = [
         'index' => 'metrique-plonk::index',
         'create' => 'metrique-plonk::create',
-        'store' => 'metrique-plonk::store',
+        'edit' => 'metrique-plonk::edit',
+        'destroy' => 'metrique-plonk::destroy',
     ];
 
     /**
@@ -25,7 +27,7 @@ class PlonkController extends Controller
      *
      * @return Response
      */
-    public function index(PlonkIndexRepository $plonk, Request $request)
+    public function index(PlonkRepository $plonk, Request $request)
     {
         $pagination = $plonk->paginate(config('plonk.paginate.items'));
         $querystring = array_only($request->input(), 'filter');
@@ -67,7 +69,9 @@ class PlonkController extends Controller
             return back()->withInput();
         }
 
-        return redirect('plonk.index');
+        flash()->success('Your image has been uploaded successfully.'); // Replace with lang?
+
+        return redirect()->route('plonk.index');
     }
 
     /**
@@ -87,9 +91,11 @@ class PlonkController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function edit($id, PlonkRepository $plonk)
     {
-        //
+        return view($this->views['edit'])->with([
+            'asset' => $plonk->find($id)
+        ]);
     }
 
     /**
@@ -99,9 +105,19 @@ class PlonkController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(PlonkUpdateRequest $request, $id, PlonkRepository $plonk)
     {
-        //
+        try {
+            $plonk->update($id, [
+                'title' => $request->input('title'),
+                'alt' => $request->input('alt'),
+            ]);
+        } catch (PlonkException $e) {
+            back()->withInput();
+        }
+
+        flash()->success('You have edited the image details successfully.');
+        return redirect()->route('plonk.index');
     }
 
     /**

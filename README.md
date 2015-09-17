@@ -21,16 +21,10 @@ Library for image management in Laravel 5
 5. `php artisan metrique:migrate-plonk` to install the migrations to the database/migrations in your application. 
 
 ### Config
-
-Config defaults can be configured by editing `config/plonk.php` in your main application directory.
-
 You can publish the  `config/plonk.php` config file to your application config directory by running `php artisan vendor:publish --tag="plonk-config"`
 
-
 ## Usage
-
 ** These are just notes for now... **
-
 Route::resource('plonk', '\Metrique\Plonk\Http\Controllers\PlonkController', ['only' => ['index', 'create', 'store']]);
 
 

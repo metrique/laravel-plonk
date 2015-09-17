@@ -4,8 +4,8 @@ namespace Metrique\Plonk\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use TG\Http\Requests;
-use TG\Http\Controllers\Controller;
+use Metrique\Plonk\Http\Controller;
+use Metrique\Plonk\Http\Requests\Request;
 use Metrique\Plonk\Exceptions\PlonkException;
 use Metrique\Plonk\Helpers\FoundationPaginationPresenter;
 use Metrique\Plonk\Http\Requests\PlonkStoreRequest;

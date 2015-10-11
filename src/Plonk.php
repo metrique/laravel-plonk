@@ -14,6 +14,8 @@ class Plonk implements PlonkInterface {
      */
     public $app;
 
+    public $plonk;
+
     /**
      * Create a new Building instance
      * 
@@ -37,21 +39,22 @@ class Plonk implements PlonkInterface {
             return false;
         }
 
+        $this->plonk = json_decode($plonkJson);
+
         return true;
     }
 
-    public function smallest($plonkJson)
+    public function smallest($plonkJson = null)
     {
-        if(!$this->validate($plonkJson))
+        if(!$this->validate($plonkJson) && is_null($this->plonk))
         {
             return '';
         }
 
         $base = rtrim(config('plonk.output.paths.base'), '/');
-        $plonk = json_decode($plonkJson);
         $width = PHP_INT_MAX;
 
-        foreach($plonk->variations as $key => $value)
+        foreach($this->plonk->variations as $key => $value)
         {
             if($value->width < $width)
             {
@@ -65,21 +68,20 @@ class Plonk implements PlonkInterface {
             return '';
         }
 
-        return implode('/', [$base, str_limit($plonk->hash, 4), $plonk->hash.'-'.$select->name.'.'.$plonk->extension]);
+        return implode('/', [$base, str_limit($this->plonk->hash, 4), $this->plonk->hash.'-'.$select->name.'.'.$this->plonk->extension]);
     }
 
-    public function largest($plonkJson)
+    public function largest($plonkJson = null)
     {
-        if(!$this->validate($plonkJson))
+        if(!$this->validate($plonkJson) && is_null($this->plonk))
         {
             return '';
         }
 
         $base = rtrim(config('plonk.output.paths.base'), '/');
-        $plonk = json_decode($plonkJson);
         $width = 0;
 
-        foreach($plonk->variations as $key => $value)
+        foreach($this->plonk->variations as $key => $value)
         {
             if($value->width > $width)
             {
@@ -93,6 +95,16 @@ class Plonk implements PlonkInterface {
             return '';
         }
 
-        return implode('/', [$base, str_limit($plonk->hash, 4), $plonk->hash.'-'.$select->name.'.'.$plonk->extension]);
+        return implode('/', [$base, str_limit($this->plonk->hash, 4), $this->plonk->hash.'-'.$select->name.'.'.$this->plonk->extension]);
+    }
+
+    public function alt($plonkJson = null)
+    {
+        if(!$this->validate($plonkJson) && is_null($this->plonk))
+        {
+            return '';
+        }
+
+        return $this->plonk->alt;
     }
 }

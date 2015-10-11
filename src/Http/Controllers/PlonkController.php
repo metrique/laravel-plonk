@@ -5,7 +5,6 @@ namespace Metrique\Plonk\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Metrique\Plonk\Http\Controller;
-use Metrique\Plonk\Http\Requests\Request;
 use Metrique\Plonk\Exceptions\PlonkException;
 use Metrique\Plonk\Helpers\FoundationPaginationPresenter;
 use Metrique\Plonk\Http\Requests\PlonkStoreRequest;
@@ -18,8 +17,13 @@ class PlonkController extends Controller
     protected $views = [
         'index' => 'metrique-plonk::index',
         'create' => 'metrique-plonk::create',
+        'show' => 'metrique-plonk::show',
         'edit' => 'metrique-plonk::edit',
         'destroy' => 'metrique-plonk::destroy',
+    ];
+
+    protected $routes = [
+
     ];
 
     /**
@@ -29,7 +33,7 @@ class PlonkController extends Controller
      */
     public function index(PlonkRepository $plonk, Request $request)
     {
-        $pagination = $plonk->paginate(config('plonk.paginate.items'));
+        $pagination = $plonk->paginateWithVariation(config('plonk.paginate.items'));
         $querystring = array_only($request->input(), 'filter');
 
         // $pagination->append(PlonkQueryString::get(['filter', 'ratio']));
@@ -69,7 +73,7 @@ class PlonkController extends Controller
             return back()->withInput();
         }
 
-        flash()->success('Your image has been uploaded successfully.'); // Replace with lang?
+        flash()->success('Your image has uploaded successfully.'); // Replace with lang?
 
         return redirect()->route('plonk.index');
     }
@@ -80,9 +84,11 @@ class PlonkController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show($id)
+    public function show($id, PlonkRepository $plonk)
     {
-        //
+        return view($this->views['show'])->with([
+            'asset' => $plonk->findWithVariation($id)
+        ]);
     }
 
     /**
@@ -94,7 +100,7 @@ class PlonkController extends Controller
     public function edit($id, PlonkRepository $plonk)
     {
         return view($this->views['edit'])->with([
-            'asset' => $plonk->find($id)
+            'asset' => $plonk->findWithVariation($id)
         ]);
     }
 

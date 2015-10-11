@@ -172,7 +172,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 		$original = trim(config('plonk.output.paths.originals'), '/');
 		$extension = '.' . PlonkMime::toExtension($this->file->getClientMimeType());
 
-		return implode('/', [$base, str_limit($this->getHash(), 2), $this->getHash().'-'.str_slug($name).$extension]);
+		return implode('/', [$base, str_limit($this->getHash(), 4), $this->getHash().'-'.str_slug($name).$extension]);
 	}
 
 	public function getCropRatios()
@@ -287,6 +287,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 
 			// Reset image to original state.
 			$this->image->reset();
+			$this->image->orientate();
 
 			switch($this->getOrientation())
 			{

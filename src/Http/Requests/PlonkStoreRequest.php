@@ -24,9 +24,10 @@ class PlonkStoreRequest extends Request
     public function rules()
     {
         return [
-            'file' => 'required|image|max:5120',
-            'title' => 'required|min:3|max:255',
-            'alt' => 'required|min:3|max:255',
+            'file' => 'required_without:data|image|max:5120',
+            'data' => 'required_without:file|string',
+            'title' => 'required|string|min:3|max:255',
+            'alt' => 'required|string|min:3|max:255',
         ];
     }
 }

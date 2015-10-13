@@ -1,6 +1,6 @@
 <?php
 
-namespace TG\Repositories\Abstracts;
+namespace Metrique\Plonk\Repositories\Abstracts;
 
 /**
  * EloquentRepositoryInterface provides the standard

@@ -11,7 +11,7 @@ use Metrique\Plonk\Repositories\Contracts\EloquentRepositoryInterface;
  * to the right eloquent model based on the $modelClassName.
  * 
  */
-abstract class EloquentRepositoryAbstract implements EloquentRepositoryInterface {
+abstract class EloquentRepositoryAbstract implements EloquentRepositoryAbstractInterface {
     
     protected $app;
     protected $model;

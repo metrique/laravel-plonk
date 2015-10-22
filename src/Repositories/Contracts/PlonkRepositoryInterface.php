@@ -2,8 +2,10 @@
 
 namespace Metrique\Plonk\Repositories\Contracts;
 
-interface PlonkRepositoryInterface extends EloquentRepositoryInterface
+use Metrique\Plonk\Repositories\Abstracts\EloquentRepositoryAbstractInterface;
+
+interface PlonkRepositoryInterface extends EloquentRepositoryAbstractInterface
 {
 	public function findWithVariation($id, array $columns = ['*'], $fail = true);
 	public function paginateWithVariation($perPage = 10, array $columns = ['*'], array $order = []);
-}
+}	

@@ -132,8 +132,15 @@ class PlonkController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($id, PlonkRepository $plonk)
     {
-        //
+        try {
+            $plonk->unpublish($id);
+        } catch (PlonkException $e) {
+            back()->withInput();
+        }
+
+        flash()->success('You have removed the image successfully.');
+        return redirect()->route('plonk.index');
     }
 }

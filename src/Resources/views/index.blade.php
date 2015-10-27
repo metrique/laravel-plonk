@@ -26,9 +26,13 @@
 						</a>
 					</p>
 					<p>
-						<a href="{{ route('plonk.show', $value->id) }}" class="button tiny"><i class="fa fa-lg fa-eye"></i></a>
-						<a href="{{ route('plonk.edit', $value->id) }}" class="button tiny"><i class="fa fa-lg fa-pencil"></i></a>
-						<a href="{{ route('plonk.destroy', $value->id) }}" class="button tiny"><i class="fa fa-lg fa-trash"></i></a>
+						<form method="POST" action="{{ route('plonk.destroy', $value->id) }}">
+							<a href="{{ route('plonk.show', $value->id) }}" class="button tiny"><i class="fa fa-lg fa-eye"></i></a>
+							<a href="{{ route('plonk.edit', $value->id) }}" class="button tiny"><i class="fa fa-lg fa-pencil"></i></a>
+							{!! csrf_field() !!}
+							<input type="hidden" name="_method" value="DELETE">
+							<button type="submit" class="tiny" data-role="destroy"><i class="fa fa-lg fa-trash"></i></button>
+						</form>
 					</p>
 				</li>
 			@endforeach

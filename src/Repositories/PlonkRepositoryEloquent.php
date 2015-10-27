@@ -13,16 +13,26 @@ class PlonkRepositoryEloquent extends EloquentRepositoryAbstract implements Plon
     {
         if($fail)
         {
-            return $this->model->with('variations')->findOrFail($id, $columns);
+            return $this->model->with('variations')->where('published', 1)->findOrFail($id, $columns);
         }
         
-        return $this->model->with('variations')->find($id, $columns);
+        return $this->model->with('variations')->where('published', 1)->find($id, $columns);
     }
 
     public function paginateWithVariation($perPage = 10, array $columns = ['*'], array $order = [])
     {
-    	$this->model = $this->model->with('variations');
+    	$this->model = $this->model->with('variations')->where('published', 1);
 
     	return $this->paginate($perPage, $columns, $order);
+    }
+
+    public function publish($id)
+    {
+        $this->update($id, ['published' => 1]);
+    }
+
+    public function unpublish($id)
+    {
+        $this->update($id, ['published' => 0]);
     }
 }

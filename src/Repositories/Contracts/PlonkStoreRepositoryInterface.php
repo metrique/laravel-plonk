@@ -70,11 +70,4 @@ interface PlonkStoreRepositoryInterface
 	 * @return array
 	 */
 	public function getCropRatios();
-
-	/**
-	 * Resets the class to it's default state.
-	 * 
-	 * @return void
-	 */
-	public function reset();
 }

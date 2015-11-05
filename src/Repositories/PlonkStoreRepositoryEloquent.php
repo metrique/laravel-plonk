@@ -132,20 +132,20 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 	{
 		// Validate request and image...
 		$this->validatesWithException();
+		$this->validateImageWithException();
 
-		// Create images
-		$this->createImage();
-
-		// Resize images
+		// Request and create images.
 		$images = $this->requestImages();
 
 		// Send each image to Filesystem
 		$this->save($images);
 
 		// Store reference to image in DB
-		// $this->create($images);
+		$this->create($images);
 
 		unset($images);
+
+		$this->reset();
 
 		return true;
 	}
@@ -174,6 +174,45 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 		unset($finfo);
 		
 		return $this->store();
+	}
+
+	/**
+	 * Validate the image.
+	 * 
+	 * @return bool
+	 */
+	protected function validateImage()
+	{
+		if(isset($this->image)) unset($this->image);
+		if(isset($this->imageManager)) unset($this->imageManager);
+
+		try
+		{
+			$this->imageManager = new ImageManager();
+			$this->image = $this->imageManager->make($this->file);
+		}
+
+		catch (\Intervention\Image\Exception\NotReadableException $e)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Validate the image with an exception.
+	 * 
+	 * @return bool
+	 */
+	protected function validateImageWithException()
+	{
+		if(!$this->validateImage())
+		{
+			throw new PlonkException('Plonk image did not validate.');
+		}
+		
+		return true;
 	}
 
 	/**
@@ -254,30 +293,6 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 	}
 
 	/**
-	 * Test if the image validates.
-	 * 
-	 * @return bool
-	 */
-	protected function createImage()
-	{
-		if(isset($this->image)) unset($this->image);
-		if(isset($this->imageManager)) unset($this->imageManager);
-
-		try
-		{
-			$this->imageManager = new ImageManager();
-			$this->image = $this->imageManager->make($this->file);
-		}
-
-		catch (\Intervention\Image\Exception\NotReadableException $e)
-		{
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
 	 * Request hash of image upload data.
 	 * 
 	 * @return string
@@ -309,30 +324,30 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 	 */
 	protected function requestImages()
 	{
-		$images = [];
-
 		// Backup image in its original state.
-		$this->image->backup();
+		// $this->image->backup();
+		
+		// Container for image data.
+		$images = [];
 
 		// Produce images for each size.
 		foreach (config('plonk.size') as $key => $value) {
 
-			// Reset image to original state.
-			$this->image->reset();
-			$this->image->orientate();
+			$image = clone($this->image);
+			$image->orientate();
 
 			switch($this->getOrientation())
 			{
 				case PlonkOrientation::SQUARE:
 				case PlonkOrientation::LANDSCAPE:
-					$this->image->resize($value['width'], null, function($constraint) {
+					$image->resize($value['width'], null, function($constraint) {
 						$constraint->aspectRatio();
 						$constraint->upsize();
 					});
 				break;
 
 				case PlonkOrientation::PORTRAIT:
-					$this->image->resize(null, $value['height'], function($constraint) {
+					$image->resize(null, $value['height'], function($constraint) {
 						$constraint->aspectRatio();
 						$constraint->upsize();
 					});
@@ -341,16 +356,15 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 
 			// Store new images.
 			array_push($images, [
-				'data' => (string) $this->image->encode(null, $value['quality']),
+				'data' => (string) $image->encode(null, $value['quality']),
 				'name' => $value['name'],
-				'width' => $this->image->width(),
-				'height' => $this->image->height(),
+				'width' => $image->width(),
+				'height' => $image->height(),
 				'quality' => $value['quality'],
 			]);
-		}
 
-		// Reset image to original state for any future needs.
-		$this->image->reset();
+			unset($image);
+		}
 
 		return $images;
 	}
@@ -384,7 +398,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 	protected function create(&$images)
 	{
 		\DB::connection()->disableQueryLog();
-		
+
 		// Create asset entry.
 		$asset = PlonkAsset::firstOrCreate([
 			'hash' => $this->getHash(),

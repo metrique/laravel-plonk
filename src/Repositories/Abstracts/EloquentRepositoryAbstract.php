@@ -3,7 +3,7 @@
 namespace Metrique\Plonk\Repositories\Abstracts;
 
 use Illuminate\Container\Container;
-use Metrique\Plonk\Repositories\Contracts\EloquentRepositoryInterface;
+use Metrique\Plonk\Repositories\Abstracts\EloquentRepositoryAbstractInterface;
 
 /**
  * The Abstract Repository provides default implementations of the methods defined

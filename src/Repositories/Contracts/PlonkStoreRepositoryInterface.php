@@ -27,6 +27,13 @@ interface PlonkStoreRepositoryInterface
 	public function store();
 
 	/**
+	 * Create the images, and save to file system & create their entries in the database.
+	 * 
+	 * @return bool
+	 */
+	public function storeCli($file, $title, $alt, $description);
+
+	/**
 	 * Requests and returns a SHA256 hash of the image file contents.
 	 * 
 	 * @return string

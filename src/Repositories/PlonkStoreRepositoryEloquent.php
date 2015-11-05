@@ -74,12 +74,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 	 */
 	public function validates()
 	{
-		if(!$this->validates)
-		{
-			$this->validates = $this->requestValidates() & $this->imageValidates();
-		}
-
-		return $this->validates;
+		return $this->requestValidates();
 	}
 
 	/**
@@ -98,6 +93,37 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 	}
 
 	/**
+	 * Test if the plonk form upload validates.
+	 * 
+	 * @return bool
+	 */
+	protected function requestValidates()
+	{
+		// Check if input has file
+		if(!$this->request->hasFile($this->inputName))
+		{
+			return false;
+		}
+
+		// Store file reference.
+		$this->file = $this->request->file($this->inputName);
+
+		// Check if mime type matches allowed mimetypes in config
+		if(!in_array($this->file->getMimeType(), config('plonk.mime')))
+		{
+			return false;
+		}
+
+		// Check if file is valid
+		if(!$this->file->isValid())
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * {@inheritdoc}
 	 * 
 	 * @return bool
@@ -108,13 +134,18 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 		$this->validatesWithException();
 
 		// Create images
+		$this->createImage();
+
+		// Resize images
 		$images = $this->requestImages();
 
 		// Send each image to Filesystem
 		$this->save($images);
 
 		// Store reference to image in DB
-		$this->create($images);
+		// $this->create($images);
+
+		unset($images);
 
 		return true;
 	}
@@ -126,12 +157,21 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 	 */
 	public function storeCli($file, $title, $alt, $description)
 	{
+		$this->imageManager = new ImageManager();
+		$this->request = new Request();
+
+		$finfo = finfo_open(FILEINFO_MIME_TYPE);
+		$uploadedFile = new \Symfony\Component\HttpFoundation\File\UploadedFile($file, basename($file), finfo_file($finfo, $file), filesize($file), null, true);
+		$this->request->files->replace(['file' => $uploadedFile]);
+
 		$this->request->merge([
-			'file' => $file,
 			'title' => $title,
 			'alt' => $alt,
 			'description' => $description,
 		]);
+
+		unset($uploadedFile);
+		unset($finfo);
 		
 		return $this->store();
 	}
@@ -214,45 +254,18 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 	}
 
 	/**
-	 * Test if the plonk form upload validates.
-	 * 
-	 * @return bool
-	 */
-	protected function requestValidates()
-	{
-		// Check if input has file
-		if(!$this->request->hasFile($this->inputName))
-		{
-			return false;
-		}
-
-		// Store file reference.
-		$this->file = $this->request->file($this->inputName);
-
-		// Check if mime type matches allowed mimetypes in config
-		if(!in_array($this->file->getMimeType(), config('plonk.mime')))
-		{
-			return false;
-		}
-
-		// Check if file is valid
-		if(!$this->file->isValid())
-		{
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
 	 * Test if the image validates.
 	 * 
 	 * @return bool
 	 */
-	protected function imageValidates()
+	protected function createImage()
 	{
+		if(isset($this->image)) unset($this->image);
+		if(isset($this->imageManager)) unset($this->imageManager);
+
 		try
 		{
+			$this->imageManager = new ImageManager();
 			$this->image = $this->imageManager->make($this->file);
 		}
 
@@ -361,13 +374,17 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 				throw new PlonkException('Plonk could not store file.');
 			}
 
-			unset($value['data']);
+			unset($images[$key]['data']);
 		}
+
+		unset($storage);
 	}
 
 
 	protected function create(&$images)
 	{
+		\DB::connection()->disableQueryLog();
+		
 		// Create asset entry.
 		$asset = PlonkAsset::firstOrCreate([
 			'hash' => $this->getHash(),

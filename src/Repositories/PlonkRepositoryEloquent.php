@@ -19,6 +19,15 @@ class PlonkRepositoryEloquent extends EloquentRepositoryAbstract implements Plon
         return $this->model->with('variations')->where('published', 1)->find($id, $columns);
     }
 
+    public function findWithVariationByHash($hash, array $columns = ['*'], $fail = true)
+    {
+        if($fail)
+        {
+            return $this->model->with('variations')->where('published', 1)->where('hash', $hash)->first($columns);    
+        }
+        return $this->model->with('variations')->where('published', 1)->where('hash', $hash)->firstOrFail($columns);
+    }
+
     public function paginateWithVariation($perPage = 10, array $columns = ['*'], array $order = [])
     {
     	$this->model = $this->model->with('variations')->where('published', 1);

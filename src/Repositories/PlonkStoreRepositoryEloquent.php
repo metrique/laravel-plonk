@@ -91,7 +91,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 	{
 		if(!$this->validates())
 		{
-			throw new PlonkException('Image or Plonk update does not validate.');
+			throw new PlonkException('Plonk request did not validate.');
 		}
 
 		return true;
@@ -114,7 +114,26 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 		$this->save($images);
 
 		// Store reference to image in DB
-		$this->create($images);		
+		$this->create($images);
+
+		return true;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 * 
+	 * @return bool
+	 */
+	public function storeCli($file, $title, $alt, $description)
+	{
+		$this->request->merge([
+			'file' => $file,
+			'title' => $title,
+			'alt' => $alt,
+			'description' => $description,
+		]);
+		
+		return $this->store();
 	}
 
 	/**
@@ -345,6 +364,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 			unset($value['data']);
 		}
 	}
+
 
 	protected function create(&$images)
 	{

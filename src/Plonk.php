@@ -29,6 +29,8 @@ class Plonk implements PlonkInterface {
 
     public function validate($plonkJson)
     {
+        $this->plonk = null;
+        
         if(empty($plonkJson))
         {
             return false;
@@ -46,7 +48,7 @@ class Plonk implements PlonkInterface {
 
     public function smallest($plonkJson = null)
     {
-        if(!$this->validate($plonkJson) && is_null($this->plonk))
+        if(!$this->validate($plonkJson))
         {
             return '';
         }
@@ -73,7 +75,7 @@ class Plonk implements PlonkInterface {
 
     public function largest($plonkJson = null)
     {
-        if(!$this->validate($plonkJson) && is_null($this->plonk))
+        if(!$this->validate($plonkJson))
         {
             return '';
         }
@@ -100,7 +102,7 @@ class Plonk implements PlonkInterface {
 
     public function alt($plonkJson = null)
     {
-        if(!$this->validate($plonkJson) && is_null($this->plonk))
+        if(!$this->validate($plonkJson))
         {
             return '';
         }

@@ -40,7 +40,7 @@
 	</fieldset>
 </div>
 
-<div class="row text-center">
+<div class="row pagination-centered">
 	{!! $pagination !!}
 </div>
 

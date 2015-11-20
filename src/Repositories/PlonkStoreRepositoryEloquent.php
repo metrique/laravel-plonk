@@ -99,6 +99,20 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 	 */
 	protected function requestValidates()
 	{
+		if($this->request->hasFile($this->inputName))
+		{
+			return $this->requestWithFileValidates()
+		}
+
+		return $this->requestWithDataValidates();
+
+	}
+
+	/**
+	 * Request with File validates
+	 */
+	protected function requestWithFileValidates()
+	{
 		// Check if input has file
 		if(!$this->request->hasFile($this->inputName))
 		{
@@ -119,6 +133,33 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 		{
 			return false;
 		}
+
+		return true;
+	}
+
+	/**
+	 * Request with Data validates.
+	 * This method can test for type of encoding. For the moment we will just test for Base64.
+	 */
+	public function requestWithDataValidates()
+	{
+		$fileContents = base64_decode($this->request->input('data');
+
+		if(!$fileContents)
+		{
+			return false;
+		}
+		
+		$file = tempnam(sys_get_temp_dir(), 'Plonk');
+		$fileHandler = fopen($file, 'w');
+		fwrite($fileHandler, $fileContents);
+
+		$finfo = finfo_open(FILEINFO_MIME_TYPE);
+		$uploadedFile = new \Symfony\Component\HttpFoundation\File\UploadedFile($file, basename($file), finfo_file($finfo, $file), filesize($file), null, true);
+		$this->request->files->replace(['file' => $uploadedFile]);
+
+		fclose($fileHandler);
+		unset($file);
 
 		return true;
 	}
@@ -324,9 +365,6 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 	 */
 	protected function requestImages()
 	{
-		// Backup image in its original state.
-		// $this->image->backup();
-		
 		// Container for image data.
 		$images = [];
 

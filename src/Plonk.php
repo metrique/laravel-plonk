@@ -43,6 +43,11 @@ class Plonk implements PlonkInterface {
 
         $this->plonk = json_decode($plonkJson);
 
+        if(json_last_error() != JSON_ERROR_NONE)
+        {
+            return false;
+        }
+
         return true;
     }
 

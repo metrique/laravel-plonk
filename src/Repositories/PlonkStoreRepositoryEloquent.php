@@ -143,7 +143,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 	 */
 	public function requestWithDataValidates()
 	{
-		$fileContents = base64_decode(ltrim($this->request->input('data'), 'data:image/jpeg;base64,');
+		$fileContents = base64_decode(ltrim($this->request->input('data'), 'data:image/jpeg;base64,'));
 
 		if(!$fileContents)
 		{

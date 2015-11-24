@@ -101,7 +101,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 	{
 		if($this->request->hasFile($this->inputName))
 		{
-			return $this->requestWithFileValidates()
+			return $this->requestWithFileValidates();
 		}
 
 		return $this->requestWithDataValidates();

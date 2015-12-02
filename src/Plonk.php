@@ -15,7 +15,7 @@ class Plonk implements PlonkInterface {
     public $app;
 
     public $plonk;
-
+    public $plonkArray;
     /**
      * Create a new Building instance
      * 
@@ -27,6 +27,19 @@ class Plonk implements PlonkInterface {
         $this->app = $app;
     }
 
+    public function make($plonkJson)
+    {
+        $this->plonk = json_decode($plonkJson);
+        $this->plonkArray = json_decode($plonkJson, true);
+
+        if(json_last_error() != JSON_ERROR_NONE)
+        {
+            return false;
+        }
+        
+        return true;
+    }
+
     public function validate($plonkJson)
     {
         $this->plonk = null;
@@ -36,14 +49,21 @@ class Plonk implements PlonkInterface {
             return false;
         }
 
-        $this->plonk = json_decode($plonkJson);
+        return $this->make($plonkJson);
+    }
 
-        if(json_last_error() != JSON_ERROR_NONE)
+    public function byName($name, $plonkJson = null)
+    {
+        if(!$this->validate($plonkJson))
         {
-            return false;
+            return '';
         }
 
-        return true;
+        $base = rtrim(config('plonk.output.paths.base'), '/');
+        $key = array_search($name, array_column($this->plonkArray['variations'], 'name'));
+        $select = $this->plonk->variations[$key];
+
+        return implode('/', [$base, str_limit($this->plonk->hash, 4), $this->plonk->hash.'-'.$select->name.'.'.$this->plonk->extension]);
     }
 
     public function smallest($plonkJson = null)
@@ -98,6 +118,18 @@ class Plonk implements PlonkInterface {
         }
 
         return implode('/', [$base, str_limit($this->plonk->hash, 4), $this->plonk->hash.'-'.$select->name.'.'.$this->plonk->extension]);
+    }
+
+    public function original($plonkJson = null)
+    {
+        if(!$this->validate($plonkJson))
+        {
+            return '';
+        }
+
+        $base = rtrim(config('plonk.output.paths.base'), '/');
+
+        return implode('/', [$base, ltrim(config('plonk.output.paths.originals'), '/'), $this->plonk->hash.'.'.$this->plonk->extension]);
     }
 
     public function alt($plonkJson = null)

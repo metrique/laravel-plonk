@@ -101,7 +101,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 	{
 		if($this->request->hasFile($this->inputName))
 		{
-			return $this->requestWithFileValidates()
+			return $this->requestWithFileValidates();
 		}
 
 		return $this->requestWithDataValidates();
@@ -143,7 +143,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 	 */
 	public function requestWithDataValidates()
 	{
-		$fileContents = base64_decode($this->request->input('data');
+		$fileContents = base64_decode($this->request->input('data'));
 
 		if(!$fileContents)
 		{
@@ -156,6 +156,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 
 		$finfo = finfo_open(FILEINFO_MIME_TYPE);
 		$uploadedFile = new \Symfony\Component\HttpFoundation\File\UploadedFile($file, basename($file), finfo_file($finfo, $file), filesize($file), null, true);
+		
 		$this->request->files->replace(['file' => $uploadedFile]);
 
 		fclose($fileHandler);

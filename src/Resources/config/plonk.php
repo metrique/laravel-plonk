@@ -54,6 +54,11 @@ return [
             'width' => 1920,
             'height' => 1080,
             'quality' => 40,
+        ],[
+            'name' => 'high',
+            'width' => 1280,
+            'height' => 720,
+            'quality' => 80,
         ]
     ]
 ];

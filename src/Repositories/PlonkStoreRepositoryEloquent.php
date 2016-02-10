@@ -414,7 +414,6 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 			]);
 
 			$image->reset();
-			// unset($image);
 		}
 
 		return $images;
@@ -429,6 +428,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 		{
 			throw new PlonkException('Plonk could not store file.');
 		}
+
 
 		// Store variations.
 		foreach($images as $key => $value)

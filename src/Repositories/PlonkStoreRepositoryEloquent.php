@@ -467,6 +467,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 			'width' => $this->image->width(),
 			'height' => $this->image->height(),
 			'ratio' => $this->image->width() / $this->image->height(),
+			'published' => 1,
 		]);
 
 		foreach ($images as $key => $value) {

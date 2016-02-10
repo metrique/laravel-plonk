@@ -375,9 +375,10 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 		// Produce images for each size.
 		foreach (config('plonk.size') as $key => $value) {
 
-			$image = clone($this->image);
+			$image = $this->image;
+			$image->backup();
 			$image->orientate();
-
+			
 			switch($this->getOrientation())
 			{
 				case PlonkOrientation::SQUARE:
@@ -397,15 +398,23 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 			}
 
 			// Store new images.
+			if(PlonkMime::toExtension($this->file->getClientMimeType()) == 'image/jpeg')
+			{
+				$data = (string) $image->encode(PlonkMime::toExtension($this->file->getClientMimeType()), $value['quality']);
+			} else {
+				$data = (string) $image->encode(PlonkMime::toExtension($this->file->getClientMimeType()));
+			}
+
 			array_push($images, [
-				'data' => (string) $image->encode(null, $value['quality']),
+				'data' => $data,
 				'name' => $value['name'],
 				'width' => $image->width(),
 				'height' => $image->height(),
 				'quality' => $value['quality'],
 			]);
 
-			unset($image);
+			$image->reset();
+			// unset($image);
 		}
 
 		return $images;

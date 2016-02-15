@@ -33,8 +33,14 @@ class PlonkController extends Controller
      */
     public function index(PlonkRepository $plonk, Request $request)
     {
-        $pagination = $plonk->paginateWithVariation(config('plonk.paginate.items'));
-        $querystring = array_only($request->input(), 'filter');
+        $querystring = array_only($request->input(), 'search');
+
+        if(array_key_exists('search', $querystring))
+        {
+            $pagination = $plonk->searchAndPaginateWithVariation($querystring['search'], config('plonk.paginate.items'), ['*'], ['id' => 'desc']);
+        } else {
+            $pagination = $plonk->paginateWithVariation(config('plonk.paginate.items'), ['*'], ['id' => 'desc']);
+        }
 
         // $pagination->append(PlonkQueryString::get(['filter', 'ratio']));
         return view($this->views['index'])->with([

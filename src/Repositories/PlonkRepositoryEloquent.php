@@ -35,6 +35,13 @@ class PlonkRepositoryEloquent extends EloquentRepositoryAbstract implements Plon
     	return $this->paginate($perPage, $columns, $order);
     }
 
+    public function searchAndPaginateWithVariation($query, $perPage = 10, array $columns = ['*'], array $order = [])
+    {
+        $this->model = $this->model->with('variations')->where('published', 1)->search($query);
+
+        return $this->paginate($perPage, $columns, $order);
+    }
+
     public function publish($id)
     {
         $this->update($id, ['published' => 1]);

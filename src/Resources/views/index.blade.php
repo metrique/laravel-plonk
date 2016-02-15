@@ -13,9 +13,23 @@
 <div class="row">
 	<h2>Assets</h2>
 	@if(count($assets) < 1)
-		<p>No assets, sorry!</p>
-	@endif
+		<p>No assets found, sorry!</p>
+	@else
 	
+	<form action="{{ request()->url() }}" method="get">
+		<div class="row collapse postfix-round">
+			<div class="small-8 columns">
+				<input type="text" name="search" placeholder="Search...">
+			</div>
+			<div class="small-2 columns">
+				<button type="submit" class="button postfix"><i class="fa fa-search"></i> Search</button>
+			</div>
+			<div class="small-2 columns">
+				<a href="{{ route('plonk.index') }}" class="button postfix"><i class="fa fa-times"></i> Clear</a>
+			</div>
+		</div>
+	</form>
+
 	<fieldset>
 		<ul class="small-block-grid-4">
 			@foreach ($assets as $key => $value)
@@ -38,6 +52,7 @@
 			@endforeach
 		</ul>
 	</fieldset>
+	@endif
 </div>
 
 <div class="row pagination-centered">

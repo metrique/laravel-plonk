@@ -8,6 +8,7 @@ use Metrique\Plonk\Repositories\Contracts\PlonkRepositoryInterface;
 use Metrique\Plonk\Repositories\Contracts\PlonkStoreRepositoryInterface;
 use Metrique\Plonk\Repositories\PlonkRepositoryEloquent;
 use Metrique\Plonk\Repositories\PlonkStoreRepositoryEloquent;
+use Sofa\Eloquence\ServiceProvider as EloquenceServiceProvider;
 
 class PlonkServiceProvider extends ServiceProvider
 {
@@ -38,11 +39,18 @@ class PlonkServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerEloquence();
+
         $this->registerConfig();
         $this->registerCommands();
 
         $this->registerPlonkIndexRepository();
         $this->registerPlonkStoreRepository();
+    }
+
+    public function registerEloquence()
+    {
+        $this->app->register(EloquenceServiceProvider::class);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Metrique\Plonk;
 
 use Illuminate\Support\ServiceProvider;
 use Metrique\Plonk\Commands\PlonkMigrationsCommand;
+use Metrique\Plonk\Commands\PlonkBulkCommand;
 use Metrique\Plonk\Repositories\Contracts\PlonkRepositoryInterface;
 use Metrique\Plonk\Repositories\Contracts\PlonkStoreRepositoryInterface;
 use Metrique\Plonk\Repositories\PlonkRepositoryEloquent;
@@ -30,6 +31,7 @@ class PlonkServiceProvider extends ServiceProvider
 
         // Commands
         $this->commands('command.metrique.migrate-plonk');
+        $this->commands('command.metrique.plonk-bulk');
     }
 
     /**
@@ -86,6 +88,10 @@ class PlonkServiceProvider extends ServiceProvider
     {
         $this->app->bindShared('command.metrique.migrate-plonk', function($app) {
             return new PlonkMigrationsCommand;
+        });
+
+        $this->app->bindShared('command.metrique.plonk-bulk', function($app) {
+            return new PlonkBulkCommand;
         });
     }
 

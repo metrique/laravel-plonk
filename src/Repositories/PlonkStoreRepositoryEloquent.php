@@ -19,12 +19,14 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 
 	/**
 	 * Uploaded file
+	 * 
 	 * @var Symfony\Component\HttpFoundation\File\UploadedFile
 	 */
 	protected $file;
 
 	/**
 	 * SHA256 hash of image content
+	 * 
 	 * @var string
 	 */
 	protected $hash;
@@ -45,18 +47,21 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 
 	/**
 	 * Image orientation
+	 * 
 	 * @var int
 	 */
 	protected $orientation;
 
 	/**
 	 * Laravel Request
+	 * 
 	 * @var Illuminate\Http\Request
 	 */
 	protected $request;
 
 	/**
 	 * Marks if the request has been validated.
+	 * 
 	 * @var boolean
 	 */
 	protected $validates;
@@ -109,7 +114,8 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 	}
 
 	/**
-	 * Request with File validates
+	 * Request with File validates.
+	 * 
 	 */
 	protected function requestWithFileValidates()
 	{

@@ -24,9 +24,12 @@ class PlonkAsset extends Model
 		'published'
 	];
 	
-	protected $table = 'plonk_assets';
+	protected $searchableColumns = [
+		'title',
+		'alt'
+	];
 
-	protected $searchableColumns = ['title', 'alt'];
+	protected $table = 'plonk_assets';
 
 	public function variations() {
 		return $this->hasMany('Metrique\Plonk\Eloquent\PlonkVariation', 'plonk_assets_id');

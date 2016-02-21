@@ -73,7 +73,7 @@ class PlonkMigrationsCommand extends Command
 
             if($this->createMigration($migration) === false)
             {
-                $this->output(self::$CONSOLE_ERROR, 'Could not create migration. (' . $migration['file'] . ')');
+                $this->error('Could not create migration. (' . $migration['file'] . ')');
             }
         }
 
@@ -103,7 +103,7 @@ class PlonkMigrationsCommand extends Command
 
         fclose($fh);
 
-        $this->output(self::$CONSOLE_INFO, 'Created migration. (' . $migration['file'] . ')');
+        $this->info('Created migration. (' . $migration['file'] . ')');
         
         array_pop($this->migrationsOutput);
         

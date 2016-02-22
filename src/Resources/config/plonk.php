@@ -43,17 +43,17 @@ return [
             'name' => 'medium',
             'width' => 1024,
             'height' => 576,
-            'quality' => 60,
+            'quality' => 70,
         ],[
             'name' => 'large',
             'width' => 1440,
             'height' => 810,
-            'quality' => 50,
+            'quality' => 60,
         ],[
             'name' => 'xlarge',
             'width' => 1920,
             'height' => 1080,
-            'quality' => 40,
+            'quality' => 50,
         ],[
             'name' => 'high',
             'width' => 1280,

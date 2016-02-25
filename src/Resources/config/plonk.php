@@ -2,10 +2,10 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Plonk settings.
+    | Plonk available crops.
     |--------------------------------------------------------------------------
     |
-    | This is a list of settings for laravel-plonk.
+    | This is a list of cropping settings for laravel-plonk.
     |
     */
 
@@ -15,12 +15,53 @@ return [
         '9' => '16'
     ],
 
+    'crop_tolerance' => 0.1,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Filtering and uploading query parameters
+    |--------------------------------------------------------------------------
+    |
+    | A list of parameters that can be used for filtering,
+    | and validation when storing images to Plonk.
+    |
+    */
+   
+   'query' => [
+        'filter' => [
+            'search',
+            'ratio',
+            'orientation',
+        ],
+        'store' => [
+            'ratio',
+        ],
+   ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Mime types
+    |--------------------------------------------------------------------------
+    |
+    | A list of allowed mime types that can be used with plonk.
+    |
+    */
+   
     'mime' => [
         'image/gif',
         'image/jpeg',
         'image/png',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Output
+    |--------------------------------------------------------------------------
+    |
+    | Set the disk and paths that Plonk should use for storing images.
+    |
+    */
+   
     'output' => [
         'disk' => 's3',
         'paths' => [
@@ -29,10 +70,28 @@ return [
         ]
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Paginate
+    |--------------------------------------------------------------------------
+    |
+    | Set how many images are shown per page.
+    |
+    */
+   
     'paginate' => [
         'items' => 24,
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Output sizes
+    |--------------------------------------------------------------------------
+    |
+    | This is the list of image sizes that plonk will output.
+    |
+    */
+   
     'size' => [
         [
             'name' => 'small',

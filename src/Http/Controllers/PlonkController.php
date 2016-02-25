@@ -39,8 +39,6 @@ class PlonkController extends Controller
         // Paginate Plonk Items
         $pagination = $plonk->paginate(config('plonk.paginate.items'), ['*'], ['id' => 'desc']);
 
-        // $pagination->append(PlonkQueryString::get(['filter', 'ratio']));
-       
         return view($this->views['index'])->with([
             'assets' => $pagination,
             'pagination' => FoundationPaginationPresenter::present($pagination->appends($plonk->querystring())),

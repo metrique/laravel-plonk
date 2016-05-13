@@ -15,8 +15,6 @@ class PlonkServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
-     *
-     * @return void
      */
     public function boot()
     {
@@ -24,7 +22,7 @@ class PlonkServiceProvider extends ServiceProvider
 
         // Config
         $this->publishes([
-            __DIR__.'/Resources/config/plonk.php' => config_path('plonk.php')
+            __DIR__.'/Resources/config/plonk.php' => config_path('plonk.php'),
         ], 'plonk-config');
 
         // Views
@@ -36,8 +34,6 @@ class PlonkServiceProvider extends ServiceProvider
 
     /**
      * Register the application services.
-     *
-     * @return void
      */
     public function register()
     {
@@ -56,8 +52,7 @@ class PlonkServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the PlonkIndexRepository binding
-     * @return void
+     * Register the PlonkIndexRepository binding.
      */
     public function registerPlonkIndexRepository()
     {
@@ -68,8 +63,7 @@ class PlonkServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the PlonkStoreRepository binding
-     * @return void
+     * Register the PlonkStoreRepository binding.
      */
     public function registerPlonkStoreRepository()
     {
@@ -80,24 +74,21 @@ class PlonkServiceProvider extends ServiceProvider
     }
 
     /**
-     * Reguster tge artisan command
-     * 
-     * @return void
+     * Reguster tge artisan command.
      */
     public function registerCommands()
     {
-        $this->app->bindShared('command.metrique.migrate-plonk', function($app) {
-            return new PlonkMigrationsCommand;
+        $this->app->singleton('command.metrique.migrate-plonk', function ($app) {
+            return new PlonkMigrationsCommand();
         });
 
-        $this->app->bindShared('command.metrique.plonk-bulk', function($app) {
-            return new PlonkBulkCommand;
+        $this->app->singleton('command.metrique.plonk-bulk', function ($app) {
+            return new PlonkBulkCommand();
         });
     }
 
     /**
-     * Merge config
-     * @return void
+     * Merge config.
      */
     public function registerConfig()
     {

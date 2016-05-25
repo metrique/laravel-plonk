@@ -21,7 +21,7 @@ class PlonkBulkCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'metrique:plonk-bulk;
+    protected $signature = 'metrique:plonk-bulk
                             {--dir= : Set the directory to scan for images.}
                             {--title= : Set title tag, defaults to file name.}
                             {--alt= : Set alt tag, defaults to file name.}';
@@ -33,11 +33,8 @@ class PlonkBulkCommand extends Command
      */
     protected $description = 'Upload files to plonk in bulk.';
 
-
     /**
      * Create a new command instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -55,14 +52,12 @@ class PlonkBulkCommand extends Command
     {
         $this->setOptions();
 
-        if(!is_dir($this->dir))
-        {
-            Throw new \Exception('Could not find the directory, aborting. ('. $this->dir .')');
+        if (!is_dir($this->dir)) {
+            throw new \Exception('Could not find the directory, aborting. ('.$this->dir.')');
         }
 
-        if(!$this->compileImages())
-        {
-            Throw new \Exception('Could not find any images within the specified directory, aboring. ('. $this->dir .')');
+        if (!$this->compileImages()) {
+            throw new \Exception('Could not find any images within the specified directory, aboring. ('.$this->dir.')');
         }
 
         $this->sendImagesToPlonk();
@@ -70,21 +65,17 @@ class PlonkBulkCommand extends Command
 
     private function setOptions()
     {
+        $this->dir = storage_path().'/plonk/bulk';
 
-        $this->dir = storage_path() . '/plonk/bulk';
-
-        if(is_string($this->option('dir')))
-        {
+        if (is_string($this->option('dir'))) {
             $this->dir = $this->option('dir');
         }
 
-        if(is_string($this->option('title')))
-        {
+        if (is_string($this->option('title'))) {
             $this->tags['title'] = $this->option('title');
         }
 
-        if(is_string($this->option('alt')))
-        {
+        if (is_string($this->option('alt'))) {
             $this->tags['alt'] = $this->option('alt');
         }
     }
@@ -96,8 +87,7 @@ class PlonkBulkCommand extends Command
         $regexIterator = new RegexIterator($iterator, '/^.+\.(jpg|png|gif)$/i', RecursiveRegexIterator::GET_MATCH);
 
         $this->images = iterator_to_array($regexIterator, false);
-        if(count($this->images) < 1)
-        {
+        if (count($this->images) < 1) {
             return false;
         }
 
@@ -108,12 +98,11 @@ class PlonkBulkCommand extends Command
 
     private function sendImagesToPlonk()
     {
-        foreach($this->images as $key => $value)
-        {
+        foreach ($this->images as $key => $value) {
             array_key_exists('title', $this->tags) ? $title = $this->tags['title'] : $title = $value[0];
             array_key_exists('alt', $this->tags) ? $alt = $this->tags['alt'] : $title = $value[0];
 
-            $this->info('Plonking '. $title . '...');
+            $this->info('Plonking '.$title.'...');
             $this->plonk->storeCli($value[0], $title, $alt, '');
             $this->info('Done...');
         }

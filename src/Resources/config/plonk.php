@@ -2,12 +2,16 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Plonk available crops.
+    | Route prefixes
     |--------------------------------------------------------------------------
     |
-    | This is a list of cropping settings for laravel-plonk.
+    | Prefix the routes.
     |
     */
+    'prefix' => [
+        'api' => 'api',
+        'web' => '',
+    ],
 
     'crop' => [
         '1' => '1',
@@ -26,7 +30,7 @@ return [
     | and validation when storing images to Plonk.
     |
     */
-   
+
    'query' => [
         'filter' => [
             'search',
@@ -46,7 +50,7 @@ return [
     | A list of allowed mime types that can be used with plonk.
     |
     */
-   
+
     'mime' => [
         'image/gif',
         'image/jpeg',
@@ -61,7 +65,7 @@ return [
     | Set the disk and paths that Plonk should use for storing images.
     |
     */
-   
+
     'output' => [
         'disk' => 's3',
         'paths' => [
@@ -78,7 +82,7 @@ return [
     | Set how many images are shown per page.
     |
     */
-   
+
     'paginate' => [
         'items' => 24,
     ],
@@ -91,7 +95,7 @@ return [
     | This is the list of image sizes that plonk will output.
     |
     */
-   
+
     'size' => [
         [
             'name' => 'small',

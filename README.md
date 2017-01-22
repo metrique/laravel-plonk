@@ -17,17 +17,19 @@ Add the following to the `repositories` section of your composer.json
 
 1. Add `"Metrique/laravel-plonk": "dev-master"` to the require section of your composer.json.
 2. Add `Metrique\Plonk\PlonkServiceProvider::class,` to your list of service providers. in `config/app.php`.
-3. Add `'Plonk' => Metrique\Plonk\PlonkFacade::class` to your list of aliases in `config/app.php`.
-4. `composer update`
-5. `php artisan metrique:migrate-plonk` to install the migrations to the database/migrations in your application. 
+3. `composer update`
+4. `php artisan migrate`
 
 ### Config
-You can publish the  `config/plonk.php` config file to your application config directory by running `php artisan vendor:publish --tag="plonk-config"`
+You can publish the  `config/plonk.php` config file to your application config directory by running `php artisan vendor:publish --tag="laravel-plonk"`
 
-## Usage
-resource('plonk', '\Metrique\Plonk\Http\Controllers\PlonkController');
+### Migrations
+laravel-building migrations will be automatically run when the `php artisan migrate` command is executed.
 
-## Views
+### Routes
+laravel-plonk ships with a default set of resource controllers of which you can easily adjust the url 'prefix' for via the config file.
+
+If you prefer more fine grained control then you may extend the `PlonkServiceProvider.php` file into your own application, and override the `bootRoutes` method.
+
+### Views
 If you wish to customise the views for your own application then you may extend the PlonkController and change the views properties to reflect your own views. Copying the default plonk views makes a good base for building on.
-
-

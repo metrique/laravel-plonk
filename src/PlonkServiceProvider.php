@@ -5,8 +5,10 @@ namespace Metrique\Plonk;
 use Illuminate\Support\ServiceProvider;
 use Metrique\Plonk\Commands\PlonkMigrationsCommand;
 use Metrique\Plonk\Commands\PlonkBulkCommand;
+use Metrique\Plonk\Repositories\Contracts\HookRepositoryInterface;
 use Metrique\Plonk\Repositories\Contracts\PlonkRepositoryInterface;
 use Metrique\Plonk\Repositories\Contracts\PlonkStoreRepositoryInterface;
+use Metrique\Plonk\Repositories\HookRepository;
 use Metrique\Plonk\Repositories\PlonkRepositoryEloquent;
 use Metrique\Plonk\Repositories\PlonkStoreRepositoryEloquent;
 use Sofa\Eloquence\ServiceProvider as EloquenceServiceProvider;
@@ -43,6 +45,7 @@ class PlonkServiceProvider extends ServiceProvider
     public function register()
     {
         // Repositories
+        $this->registerHookRepository();
         $this->registerPlonkIndexRepository();
         $this->registerPlonkStoreRepository();
 
@@ -85,7 +88,7 @@ class PlonkServiceProvider extends ServiceProvider
 
     public function bootViews()
     {
-        $this->loadViewsFrom(__DIR__.'/Resources/views/', 'metrique-plonk');
+        $this->loadViewsFrom(__DIR__.'/Resources/views/', 'laravel-plonk');
     }
 
     public function registerEloquence()
@@ -93,9 +96,14 @@ class PlonkServiceProvider extends ServiceProvider
         $this->app->register(EloquenceServiceProvider::class);
     }
 
-    /**
-     * Register the PlonkIndexRepository binding.
-     */
+    protected function registerHookRepository()
+    {
+        $this->app->bind(
+            HookRepositoryInterface::class,
+            HookRepository::class
+        );
+    }
+
     public function registerPlonkIndexRepository()
     {
         $this->app->bind(
@@ -104,9 +112,6 @@ class PlonkServiceProvider extends ServiceProvider
         );
     }
 
-    /**
-     * Register the PlonkStoreRepository binding.
-     */
     public function registerPlonkStoreRepository()
     {
         $this->app->bind(

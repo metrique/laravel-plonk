@@ -1,4 +1,4 @@
-@extends('metrique-plonk::master')
+@extends('laravel-plonk::master')
 
 @section('content')
 
@@ -15,7 +15,7 @@
 	@if(count($assets) < 1)
 		<p>No assets found, sorry!</p>
 	@else
-	
+
 	<form action="{{ request()->url() }}" method="get">
 		<div class="row collapse postfix-round">
 			<div class="small-8 columns">

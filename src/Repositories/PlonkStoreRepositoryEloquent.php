@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Storage;
 use Metrique\Plonk\Eloquent\PlonkAsset;
 use Metrique\Plonk\Eloquent\PlonkVariation;
 use Metrique\Plonk\Exceptions\PlonkException;
-use Metrique\Plonk\Helpers\PlonkOrientation;
-use Metrique\Plonk\Helpers\PlonkMime;
+use Metrique\Plonk\Support\PlonkOrientation;
+use Metrique\Plonk\Support\PlonkMime;
 use Metrique\Plonk\Repositories\Contracts\PlonkStoreRepositoryInterface;
 
 class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface

@@ -8,7 +8,7 @@
 	<main>
 		<div>
 			<div class="row">
-				@include('metrique-plonk::message')
+				@include('laravel-plonk::message')
 			</div>
 			@yield('content')
 		</div>

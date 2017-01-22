@@ -1,4 +1,4 @@
-@extends('metrique-plonk::master')
+@extends('laravel-plonk::master')
 
 @section('content')
 

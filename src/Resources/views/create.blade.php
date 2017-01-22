@@ -1,8 +1,8 @@
-@extends('metrique-plonk::master')
+@extends('laravel-plonk::master')
 
 @section('content')
 
-<div class="row">	
+<div class="row">
 	<h1>Plonk</h1>
 	<ul class="breadcrumbs">
 		<li><a href="{{ route('plonk.index') }}">Index</a></li>
@@ -29,7 +29,7 @@
 					<input type="hidden" name="data">
 					<input type="file" name="file">
 				</div>
-				
+
 				<div class="small-12">
 					<label for="title">Title</label>
 					<input type="text" name="title" placeholder="Title" maxlength="255" value="{{ old('title') }}">

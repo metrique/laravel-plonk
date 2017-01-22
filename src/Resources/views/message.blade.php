@@ -1,6 +1,6 @@
 @if(Session::has('flash_notification.message'))
 	@if(Session::has('flash_notification.overlay'))
-		@include('metrique-plonk::modal', [
+		@include('laravel-plonk::modal', [
 			'modalId' => 'flash-modal',
 			'title' => Session::get('flash_notification.title'),
 			'body' => Session::get('flash_notification.message'),

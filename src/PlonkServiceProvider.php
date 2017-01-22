@@ -14,22 +14,27 @@ use Sofa\Eloquence\ServiceProvider as EloquenceServiceProvider;
 class PlonkServiceProvider extends ServiceProvider
 {
     /**
+     * Indicates if loading of the provider is deferred.
+     *
+     * @var bool
+     */
+    protected $defer = false;
+
+    public function __construct($app)
+    {
+        parent::__construct($app);
+    }
+
+    /**
      * Bootstrap the application services.
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/Resources/views/', 'metrique-plonk');
-
-        // Config
-        $this->publishes([
-            __DIR__.'/Resources/config/plonk.php' => config_path('plonk.php'),
-        ], 'plonk-config');
-
-        // Views
-
-        // Commands
-        $this->commands('command.metrique.migrate-plonk');
-        $this->commands('command.metrique.plonk-bulk');
+        $this->bootCommands();
+        $this->bootConfig();
+        $this->bootMigrations();
+        $this->bootRoutes();
+        $this->bootViews();
     }
 
     /**
@@ -37,13 +42,50 @@ class PlonkServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerEloquence();
-
-        $this->registerConfig();
-        $this->registerCommands();
-
+        // Repositories
         $this->registerPlonkIndexRepository();
         $this->registerPlonkStoreRepository();
+
+        // Commands
+        $this->registerCommands();
+
+        // Eloquence
+        $this->registerEloquence();
+    }
+
+    public function bootCommands()
+    {
+        $this->commands('command.metrique.plonk-bulk');
+    }
+
+    public function bootConfig()
+    {
+        $this->publishes([
+            __DIR__.'/Resources/config/plonk.php' => config_path('plonk.php'),
+        ], 'laravel-plonk');
+
+        $this->mergeConfigFrom(
+            __DIR__.'/Resources/config/plonk.php',
+            'plonk'
+        );
+    }
+
+    protected function bootMigrations()
+    {
+        $this->loadMigrationsFrom(__DIR__.'/Database/migrations');
+    }
+
+    public function bootRoutes()
+    {
+        if (! $this->app->routesAreCached()) {
+            require __DIR__.'/Routes/api.php';
+            require __DIR__.'/Routes/web.php';
+        }
+    }
+
+    public function bootViews()
+    {
+        $this->loadViewsFrom(__DIR__.'/Resources/views/', 'metrique-plonk');
     }
 
     public function registerEloquence()
@@ -74,26 +116,12 @@ class PlonkServiceProvider extends ServiceProvider
     }
 
     /**
-     * Reguster tge artisan command.
+     * Register the artisan commands.
      */
     public function registerCommands()
     {
-        $this->app->singleton('command.metrique.migrate-plonk', function ($app) {
-            return new PlonkMigrationsCommand();
-        });
-
         $this->app->singleton('command.metrique.plonk-bulk', function ($app) {
             return new PlonkBulkCommand();
         });
-    }
-
-    /**
-     * Merge config.
-     */
-    public function registerConfig()
-    {
-        $this->mergeConfigFrom(
-            __DIR__.'/Resources/config/plonk.php', 'plonk'
-        );
     }
 }

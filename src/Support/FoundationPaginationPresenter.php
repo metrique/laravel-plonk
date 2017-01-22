@@ -1,6 +1,6 @@
 <?php
 
-namespace Metrique\Plonk\Helpers;
+namespace Metrique\Plonk\Support;
 
 use Illuminate\Contracts\Pagination\Paginator as PaginatorContract;
 use Illuminate\Contracts\Pagination\Presenter as PresenterContract;
@@ -10,7 +10,7 @@ use Illuminate\Pagination\BootstrapThreeNextPreviousButtonRendererTrait;
 
 class FoundationPaginationPresenter implements PresenterContract
 {
-	use BootstrapThreeNextPreviousButtonRendererTrait, UrlWindowPresenterTrait;
+    use BootstrapThreeNextPreviousButtonRendererTrait, UrlWindowPresenterTrait;
 
     /**
      * The paginator implementation.

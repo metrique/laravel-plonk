@@ -4,26 +4,30 @@ namespace Metrique\Plonk\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Metrique\Plonk\Http\Controller;
 use Metrique\Plonk\Exceptions\PlonkException;
-use Metrique\Plonk\Helpers\FoundationPaginationPresenter;
+use Metrique\Plonk\Http\Controllers\PlonkBaseController;
 use Metrique\Plonk\Http\Requests\PlonkStoreRequest;
 use Metrique\Plonk\Http\Requests\PlonkUpdateRequest;
 use Metrique\Plonk\Repositories\Contracts\PlonkRepositoryInterface as PlonkRepository;
 use Metrique\Plonk\Repositories\Contracts\PlonkStoreRepositoryInterface as PlonkStoreRepository;
 
-class PlonkController extends Controller
+class PlonkController extends PlonkBaseController
 {
     protected $views = [
-        'index' => 'metrique-plonk::index',
-        'create' => 'metrique-plonk::create',
-        'show' => 'metrique-plonk::show',
-        'edit' => 'metrique-plonk::edit',
-        'destroy' => 'metrique-plonk::destroy',
+        'index' => 'laravel-plonk::index',
+        'create' => 'laravel-plonk::create',
+        'show' => 'laravel-plonk::show',
+        'edit' => 'laravel-plonk::edit',
+        'destroy' => 'laravel-plonk::destroy',
     ];
 
     protected $routes = [
-
+        'index' => 'plonk.index',
+        'create' => 'plonk.create',
+        'store' => 'plonk.store',
+        'edit' => 'plonk.edit',
+        'update' => 'plonk.update',
+        'destroy' => 'plonk.destroy',
     ];
 
     /**
@@ -32,17 +36,19 @@ class PlonkController extends Controller
      * @return Response
      */
     public function index(PlonkRepository $plonk, Request $request)
-    {   
-        // Get Plonk Items     
+    {
+        // Get Plonk Items
         $plonk->allFilteredBy($request->input())->get();
 
         // Paginate Plonk Items
         $pagination = $plonk->paginate(config('plonk.paginate.items'), ['*'], ['id' => 'desc']);
 
-        return view($this->views['index'])->with([
+        $this->mergeViewData([
             'assets' => $pagination,
-            'pagination' => FoundationPaginationPresenter::present($pagination->appends($plonk->querystring())),
+            'pagination' => $pagination->appends($plonk->querystring()),
         ]);
+
+        return $this->viewWithData($this->views['index']);
     }
 
     /**
@@ -52,8 +58,11 @@ class PlonkController extends Controller
      */
     public function create(PlonkStoreRepository $plonk)
     {
-        //
-        return view($this->views['create'])->with('ratios', $plonk->getCropRatios());
+        $this->mergeViewData([
+            'ratios' => $plonk->getCropRatios(),
+        ]);
+
+        return $this->viewWithData($this->views['create']);
     }
 
     /**
@@ -64,20 +73,9 @@ class PlonkController extends Controller
      */
     public function store(PlonkStoreRequest $request, PlonkStoreRepository $plonk)
     {
-        // Test if the file upload validates...
-        try
-        {
-            $plonk->store();
-        }
+        $plonk->store();
 
-        catch (PlonkException $e)
-        {
-            return back()->withInput();
-        }
-
-        flash()->success('Your image has uploaded successfully.'); // Replace with lang?
-
-        return redirect()->route('plonk.index');
+        return redirect()->route($this->routes['index']);
     }
 
     /**
@@ -88,9 +86,11 @@ class PlonkController extends Controller
      */
     public function show($id, PlonkRepository $plonk)
     {
-        return view($this->views['show'])->with([
+        $this->mergeViewData([
             'asset' => $plonk->findWithVariation($id)
         ]);
+
+        return $this->viewWithData($this->views['show']);
     }
 
     /**
@@ -101,9 +101,11 @@ class PlonkController extends Controller
      */
     public function edit($id, PlonkRepository $plonk)
     {
-        return view($this->views['edit'])->with([
+        $this->mergeViewData([
             'asset' => $plonk->findWithVariation($id)
         ]);
+
+        return $this->viewWithData($this->views['edit']);
     }
 
     /**
@@ -115,17 +117,12 @@ class PlonkController extends Controller
      */
     public function update(PlonkUpdateRequest $request, $id, PlonkRepository $plonk)
     {
-        try {
-            $plonk->update($id, [
-                'title' => $request->input('title'),
-                'alt' => $request->input('alt'),
-            ]);
-        } catch (PlonkException $e) {
-            back()->withInput();
-        }
+        $plonk->update($id, [
+            'title' => $request->input('title'),
+            'alt' => $request->input('alt'),
+        ]);
 
-        flash()->success('You have edited the image details successfully.');
-        return redirect()->route('plonk.index');
+        return redirect()->route($this->routes['index']);
     }
 
     /**
@@ -136,13 +133,8 @@ class PlonkController extends Controller
      */
     public function destroy($id, PlonkRepository $plonk)
     {
-        try {
-            $plonk->unpublish($id);
-        } catch (PlonkException $e) {
-            back()->withInput();
-        }
+        $plonk->unpublish($id);
 
-        flash()->success('You have removed the image successfully.');
-        return redirect()->route('plonk.index');
+        return redirect()->route($this->routes['index']);
     }
 }

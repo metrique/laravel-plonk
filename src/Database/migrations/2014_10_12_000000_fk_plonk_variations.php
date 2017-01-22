@@ -1,4 +1,4 @@
-<?php echo '<?php' ?>
+<?php
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -12,8 +12,7 @@ class FkPlonkVariations extends Migration
      */
     public function up()
     {
-        Schema::table('plonk_variations', function(Blueprint $table) {
-
+        Schema::table('plonk_variations', function (Blueprint $table) {
             $table->integer('plonk_assets_id')
                 ->unsigned();
 

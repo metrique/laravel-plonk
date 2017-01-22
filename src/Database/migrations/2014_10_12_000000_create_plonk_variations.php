@@ -1,4 +1,4 @@
-<?php echo '<?php' ?>
+<?php
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -12,9 +12,9 @@ class CreatePlonkVariations extends Migration
      */
     public function up()
     {
-        Schema::create('plonk_variations', function(Blueprint $table) {
+        Schema::create('plonk_variations', function (Blueprint $table) {
             $table->increments('id');
-            $table->json('params');
+            $table->text('params');
             $table->string('name', 255);
             $table->integer('width');
             $table->integer('height');

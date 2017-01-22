@@ -1,4 +1,4 @@
-<?php echo '<?php' ?>
+<?php
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -12,9 +12,9 @@ class CreatePlonkAssets extends Migration
      */
     public function up()
     {
-        Schema::create('plonk_assets', function(Blueprint $table) {
+        Schema::create('plonk_assets', function (Blueprint $table) {
             $table->increments('id');
-            $table->json('params');
+            $table->text('params');
             $table->string('hash', 255)->unique();
             $table->string('title', 255);
             $table->string('alt', 255);

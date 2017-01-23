@@ -81,7 +81,7 @@ class PlonkRepositoryEloquent implements PlonkRepositoryInterface
      */
     public function publish($id)
     {
-        return $this->update($id, ['published' => 1]);
+        return Plonk::find($id)->update(['published' => 1]);
     }
 
     /**
@@ -89,6 +89,6 @@ class PlonkRepositoryEloquent implements PlonkRepositoryInterface
      */
     public function unpublish($id)
     {
-        return $this->update($id, ['published' => 0]);
+        return Plonk::find($id)->update(['published' => 0]);
     }
 }

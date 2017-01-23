@@ -25,12 +25,12 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
     protected $file;
 
     /**
-	 * Intervention Image
-	 *
-	 * @var Intervention\Image
-	 */
-	protected $image;
-    
+     * Intervention Image
+     *
+     * @var Intervention\Image
+     */
+    protected $image;
+
     /**
     * Intervention Image Manager
     *
@@ -58,7 +58,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
         return false;
     }
 
-    public function validateFile()
+    protected function validateFile()
     {
         $this->file = request()->file($this->name);
 
@@ -68,7 +68,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
         return $validMime & $validFile & $this->validateImage();
     }
 
-    public function validateData()
+    protected function validateData()
     {
         $fileContent = base64_decode(
             preg_replace(
@@ -105,7 +105,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
         return $this->validateImage();
     }
 
-    public function validateImage()
+    protected function validateImage()
     {
         try {
             $this->imageManager = new ImageManager();
@@ -123,15 +123,15 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
             return false;
         }
 
-        $this->create();
-        $this->persist();
+        $images = $this->create();
+        $this->persist($images);
     }
 
     public function create()
     {
         $images = collect()->push;
 
-        collect(config('plonk.size'))->each(function ($value, $key) use($images) {
+        collect(config('plonk.size'))->each(function ($value, $key) use ($images) {
             $image = $this->image;
             $image->backup();
             $image->orientate();
@@ -193,23 +193,39 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
         })->count() < 1;
     }
 
-    protected function persistToDataStore(&$images) {
+    protected function persistToDataStore(&$images)
+    {
         $asset = PlonkAsset::firstOrCreate([
             'hash' => $this->getHash(),
         ]);
 
         $asset->update([
-			'hash' => $this->getHash(),
-			'mime' => $this->file->getClientMimeType(),
-			'extension' => PlonkMime::toExtension($this->file->getClientMimeType()),
-			'title' => request()->input('title'),
-			'alt' => request()->input('alt'),
-			'description' => request()->input('description', null),
-			'orientation' => PlonkOrientation::toString($this->getOrientation()),
-			'width' => $this->image->width(),
-			'height' => $this->image->height(),
-			'ratio' => $this->image->width() / $this->image->height(),
-			'published' => 1,
-		]);
+            'hash' => $this->getHash(),
+            'mime' => $this->file->getClientMimeType(),
+            'extension' => PlonkMime::toExtension($this->file->getClientMimeType()),
+            'title' => request()->input('title'),
+            'alt' => request()->input('alt'),
+            'description' => request()->input('description', null),
+            'orientation' => PlonkOrientation::toString($this->getOrientation()),
+            'width' => $this->image->width(),
+            'height' => $this->image->height(),
+            'ratio' => $this->image->width() / $this->image->height(),
+            'published' => 1,
+        ]);
+
+        $images->each(function ($value, $key) use ($asset) {
+            $variation = PlonkVariation::firstOrCreate([
+                'name' => $value['name'],
+                'plonk_assets_id' => $asset->id
+            ]);
+
+            $variation->update([
+                'name' => $value['name'],
+                'width' => $value['width'],
+                'height' => $value['height'],
+                'quality' => $Value['quality'],
+                'plonk_assets_id' => $asset->id,
+            ]);
+        });
     }
 }

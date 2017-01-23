@@ -79,12 +79,12 @@ class PlonkServiceProvider extends ServiceProvider
 
     /**
      * Reguster tge artisan command
-     * 
+     *
      * @return void
      */
     public function registerCommands()
     {
-        $this->app->bindShared('command.metrique.migrate-plonk', function($app) {
+        $this->app->singleton('command.metrique.migrate-plonk', function ($app) {
             return new PlonkMigrationsCommand;
         });
     }

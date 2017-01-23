@@ -3,10 +3,9 @@
 namespace Metrique\Plonk\Repositories;
 
 use Metrique\Plonk\Eloquent\PlonkAsset;
-use Metrique\Plonk\Repositories\Abstracts\EloquentRepositoryAbstract;
 use Metrique\Plonk\Repositories\Contracts\PlonkRepositoryInterface;
 
-class PlonkRepositoryEloquent extends EloquentRepositoryAbstract implements PlonkRepositoryInterface
+class PlonkRepositoryEloquent implements PlonkRepositoryInterface
 {
     protected $modelClassName = 'Metrique\Plonk\Eloquent\PlonkAsset';
     protected $filteredQuerystring = [];
@@ -14,25 +13,20 @@ class PlonkRepositoryEloquent extends EloquentRepositoryAbstract implements Plon
     /**
      * {@inheritdoc}
      */
-    public function findWithVariation($id, array $columns = ['*'], $fail = true)
+    public function find($id)
     {
-        if ($fail) {
-            return $this->model->with('variations')->where('published', 1)->findOrFail($id, $columns);
-        }
-
-        return $this->model->with('variations')->where('published', 1)->find($id, $columns);
+        return PlonkAsset::with('variations')->where('published', 1)->find($id);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function findWithVariationByHash($hash, array $columns = ['*'], $fail = true)
+    public function findByHash($hash, array $columns = ['*'], $fail = true)
     {
-        if ($fail) {
-            return $this->model->with('variations')->where('published', 1)->where('hash', $hash)->first($columns);
-        }
-
-        return $this->model->with('variations')->where('published', 1)->where('hash', $hash)->firstOrFail($columns);
+        return PlonkAsset::with('variations')->where([
+            'published' => 1,
+            'hash' => $hash
+        ])->first();
     }
 
     /**
@@ -80,26 +74,6 @@ class PlonkRepositoryEloquent extends EloquentRepositoryAbstract implements Plon
         });
 
         return $plonkAsset;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function paginateWithVariation($perPage = 10, array $columns = ['*'], array $order = [])
-    {
-        $this->model = $this->allFilteredBy([]);
-
-        return $this->paginate($perPage, $columns, $order);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function searchAndPaginateWithVariation($query, $perPage = 10, array $columns = ['*'], array $order = [])
-    {
-        $this->model = $this->allFilteredBy(['search' => $query]);
-
-        return $this->paginate($perPage, $columns, $order);
     }
 
     /**

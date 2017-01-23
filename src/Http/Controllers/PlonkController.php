@@ -86,7 +86,7 @@ class PlonkController extends PlonkBaseController
     public function show($id, PlonkRepository $plonk)
     {
         $this->mergeViewData([
-            'asset' => $plonk->findWithVariation($id)
+            'asset' => $plonk->find($id)
         ]);
 
         return $this->viewWithData($this->views['show']);
@@ -101,7 +101,7 @@ class PlonkController extends PlonkBaseController
     public function edit($id, PlonkRepository $plonk)
     {
         $this->mergeViewData([
-            'asset' => $plonk->findWithVariation($id)
+            'asset' => $plonk->find($id)
         ]);
 
         return $this->viewWithData($this->views['edit']);

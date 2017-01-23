@@ -56,7 +56,7 @@
 </div>
 
 <div class="row pagination-centered">
-	{!! $pagination !!}
+	{!! $assets->links() !!}
 </div>
 
 @endsection

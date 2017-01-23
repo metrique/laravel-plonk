@@ -38,14 +38,13 @@ class PlonkController extends PlonkBaseController
     public function index(PlonkRepository $plonk, Request $request)
     {
         // Get Plonk Items
-        $plonk->allFilteredBy($request->input())->get();
-
-        // Paginate Plonk Items
-        $pagination = $plonk->paginate(config('plonk.paginate.items'), ['*'], ['id' => 'desc']);
+        $assets = $plonk
+            ->allFiltered()
+            ->paginate(config('plonk.paginate.items'))
+            ->appends($plonk->filterRequest()->toArray());
 
         $this->mergeViewData([
-            'assets' => $pagination,
-            'pagination' => $pagination->appends($plonk->querystring()),
+            'assets' => $assets,
         ]);
 
         return $this->viewWithData($this->views['index']);

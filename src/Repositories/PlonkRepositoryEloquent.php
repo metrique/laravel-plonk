@@ -2,6 +2,7 @@
 
 namespace Metrique\Plonk\Repositories;
 
+use Metrique\Plonk\Eloquent\PlonkAsset;
 use Metrique\Plonk\Repositories\Abstracts\EloquentRepositoryAbstract;
 use Metrique\Plonk\Repositories\Contracts\PlonkRepositoryInterface;
 
@@ -15,11 +16,10 @@ class PlonkRepositoryEloquent extends EloquentRepositoryAbstract implements Plon
      */
     public function findWithVariation($id, array $columns = ['*'], $fail = true)
     {
-        if($fail)
-        {
+        if ($fail) {
             return $this->model->with('variations')->where('published', 1)->findOrFail($id, $columns);
         }
-        
+
         return $this->model->with('variations')->where('published', 1)->find($id, $columns);
     }
 
@@ -28,9 +28,8 @@ class PlonkRepositoryEloquent extends EloquentRepositoryAbstract implements Plon
      */
     public function findWithVariationByHash($hash, array $columns = ['*'], $fail = true)
     {
-        if($fail)
-        {
-            return $this->model->with('variations')->where('published', 1)->where('hash', $hash)->first($columns);    
+        if ($fail) {
+            return $this->model->with('variations')->where('published', 1)->where('hash', $hash)->first($columns);
         }
 
         return $this->model->with('variations')->where('published', 1)->where('hash', $hash)->firstOrFail($columns);
@@ -39,49 +38,48 @@ class PlonkRepositoryEloquent extends EloquentRepositoryAbstract implements Plon
     /**
      * {@inheritdoc}
      */
+    public function filterRequest()
+    {
+        return $this->filterQuerystring(request()->input());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function filterQuerystring(array $querystring)
     {
-        $this->filteredQuerystring = array_intersect_key($querystring, array_flip(config('plonk.query.filter')));
+        $keys = array_keys(array_flip(config('plonk.query.filter')));
 
-        return $this->filteredQuerystring;
+        return collect($querystring)->only($keys);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function querystring()
+    public function allFiltered()
     {
-        return $this->filteredQuerystring;
-    }
+        $plonkAsset = PlonkAsset::with('variations')->where('published', 1);
 
-    /**
-     * {@inheritdoc}
-     */
-    public function allFilteredBy(array $querystring)
-    {
-        $this->filterQuerystring($querystring);
-
-        $this->model = $this->model->with('variations')->where('published', 1);
-
-        foreach($this->filteredQuerystring as $key => $value)
-        {
-            switch($key)
-            {
+        $this->filterRequest()->each(function ($value, $key) use ($plonkAsset) {
+            switch ($key) {
                 case 'search':
-                    $this->model = $this->model->search($value);
-                break;
+                    $plonkAsset = $plonkAsset->search($value);
+                    break;
 
                 case 'ratio':
-                    $this->model = $this->model->whereBetween($key, [$value - config('plonk.crop_tolerance'), $value + config('plonk.crop_tolerance')]);
-                break;
+                    $plonkAsset = $plonkAsset->whereBetween($key, [
+                        $value - config('plonk.crop_tolerance'),
+                        $value + config('plonk.crop_tolerance')
+                    ]);
+                    break;
 
                 default:
-                    $this->model = $this->model->where($key, $value);
-                break;
+                    $plonkAsset = $plonkAsset->where($key, $value);
+                    break;
             }
-        }
+        });
 
-        return $this->model;
+        return $plonkAsset;
     }
 
     /**
@@ -89,9 +87,9 @@ class PlonkRepositoryEloquent extends EloquentRepositoryAbstract implements Plon
      */
     public function paginateWithVariation($perPage = 10, array $columns = ['*'], array $order = [])
     {
-    	$this->model = $this->allFilteredBy([]);
+        $this->model = $this->allFilteredBy([]);
 
-    	return $this->paginate($perPage, $columns, $order);
+        return $this->paginate($perPage, $columns, $order);
     }
 
     /**

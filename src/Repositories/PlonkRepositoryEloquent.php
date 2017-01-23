@@ -55,6 +55,8 @@ class PlonkRepositoryEloquent implements PlonkRepositoryInterface
         $plonkAsset = PlonkAsset::with('variations')->where('published', 1);
 
         $this->filterRequest()->each(function ($value, $key) use ($plonkAsset) {
+            $cropTolerance = config('plonk.crop_tolerance');
+            
             switch ($key) {
                 case 'search':
                     $plonkAsset = $plonkAsset->search($value);
@@ -62,8 +64,8 @@ class PlonkRepositoryEloquent implements PlonkRepositoryInterface
 
                 case 'ratio':
                     $plonkAsset = $plonkAsset->whereBetween($key, [
-                        $value - config('plonk.crop_tolerance'),
-                        $value + config('plonk.crop_tolerance')
+                        $value - $cropTolerance,
+                        $value + $cropTolerance
                     ]);
                     break;
 

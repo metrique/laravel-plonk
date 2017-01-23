@@ -47,6 +47,7 @@ interface PlonkRepositoryInterface
 
     /**
      * Publish asset.
+     *
      * @param  integer $id
      * @return mixed
      */
@@ -54,6 +55,7 @@ interface PlonkRepositoryInterface
 
     /**
      * Unpublish asset.
+     *
      * @param  integer $id
      * @return mixed
      */

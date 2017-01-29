@@ -477,4 +477,8 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
             ]);
         }
     }
+
+    public function persist()
+    {
+    }
 }

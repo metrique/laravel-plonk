@@ -25,7 +25,7 @@ interface PlonkStoreRepositoryInterface
      *
      * @return array
      */
-    public function create();
+    // public function create();
 
     /**
      * Persist the created images to disk and database.

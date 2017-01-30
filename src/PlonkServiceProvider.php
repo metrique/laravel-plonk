@@ -88,7 +88,12 @@ class PlonkServiceProvider extends ServiceProvider
 
     public function bootViews()
     {
-        $this->loadViewsFrom(__DIR__.'/Resources/views/', 'laravel-plonk');
+        $views = __DIR__ . '/Resources/views/';
+        $this->loadViewsFrom($views, 'laravel-plonk');
+
+        $this->publishes([
+            __DIR__.'/Resources/views' => resource_path('views/vendor/laravel-plonk'),
+        ], 'laravel-plonk');
     }
 
     public function registerEloquence()

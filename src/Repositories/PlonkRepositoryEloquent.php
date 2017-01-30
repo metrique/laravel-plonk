@@ -52,11 +52,11 @@ class PlonkRepositoryEloquent implements PlonkRepositoryInterface
      */
     public function allFiltered()
     {
-        $plonkAsset = PlonkAsset::with('variations')->where('published', 1);
+        $plonkAsset = PlonkAsset::with('variations')->where('published', 1)->orderBy('created_at', 'desc');
 
         $this->filterRequest()->each(function ($value, $key) use ($plonkAsset) {
             $cropTolerance = config('plonk.crop_tolerance');
-            
+
             switch ($key) {
                 case 'search':
                     $plonkAsset = $plonkAsset->search($value);
@@ -83,7 +83,7 @@ class PlonkRepositoryEloquent implements PlonkRepositoryInterface
      */
     public function publish($id)
     {
-        return Plonk::find($id)->update(['published' => 1]);
+        return PlonkAsset::find($id)->update(['published' => 1]);
     }
 
     /**
@@ -91,6 +91,6 @@ class PlonkRepositoryEloquent implements PlonkRepositoryInterface
      */
     public function unpublish($id)
     {
-        return Plonk::find($id)->update(['published' => 0]);
+        return PlonkAsset::find($id)->update(['published' => 0]);
     }
 }

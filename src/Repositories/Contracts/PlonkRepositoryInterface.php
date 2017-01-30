@@ -60,4 +60,12 @@ interface PlonkRepositoryInterface
      * @return mixed
      */
     public function unpublish($id);
+
+    /**
+     * Update PlonkAsset
+     * @param  integer $id
+     * @param  array $params
+     * @return mixed
+     */
+    public function update($id, $params);
 }

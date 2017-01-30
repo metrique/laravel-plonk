@@ -93,4 +93,15 @@ class PlonkRepositoryEloquent implements PlonkRepositoryInterface
     {
         return PlonkAsset::find($id)->update(['published' => 0]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update($id, $params)
+    {
+        return PlonkAsset::find($id)->update([
+            'title' => $params['title'],
+            'alt' => $params['alt'],
+        ]);
+    }
 }

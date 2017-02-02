@@ -12,10 +12,9 @@ use Metrique\Plonk\Exceptions\PlonkException;
 use Metrique\Plonk\Support\PlonkOrientation;
 use Metrique\Plonk\Support\PlonkMime;
 use Metrique\Plonk\Repositories\Contracts\PlonkStoreRepositoryInterface;
-use Metrique\Plonk\Helpers\PlonkMime;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
+class PlonkStoreRepositoryEloquent
 {
     /**
      * Uploaded file
@@ -184,9 +183,9 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
     {
         $storage = Storage::disk(config('plonk.output.disk'));
 
-        if (!$storage->put($this->getOriginalPath(), file_get_contents($this->file->getRealPath())) {
-            return false;
-        }
+        // if (!$storage->put($this->getOriginalPath(), file_get_contents($this->file->getRealPath())) {
+        //     return false;
+        // }
 
         return $images->reject(function ($value, $key) {
             return $storage->put($this->getVariationPath($value['name'], $value['data']));

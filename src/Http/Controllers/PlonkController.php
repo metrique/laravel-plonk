@@ -37,7 +37,6 @@ class PlonkController extends PlonkBaseController
      */
     public function index(PlonkRepository $plonk, Request $request)
     {
-        // Get Plonk Items
         $assets = $plonk
             ->allFiltered()
             ->paginate(config('plonk.paginate.items'))

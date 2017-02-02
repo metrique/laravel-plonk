@@ -5,11 +5,12 @@ namespace Metrique\Plonk;
 use Metrique\Plonk\Contracts\PlonkInterface;
 use Stringy\Stringy;
 
-class Plonk implements PlonkInterface {
+class Plonk implements PlonkInterface
+{
 
     /**
      * Laravel application
-     * 
+     *
      * @var \Illuminate\Foundation\Application
      */
     public $app;
@@ -18,7 +19,7 @@ class Plonk implements PlonkInterface {
     public $plonkArray;
     /**
      * Create a new Building instance
-     * 
+     *
      * @param \Illuminate\Foundation\Application $app
      * @return void
      */
@@ -32,20 +33,18 @@ class Plonk implements PlonkInterface {
         $this->plonk = json_decode($plonkJson);
         $this->plonkArray = json_decode($plonkJson, true);
 
-        if(json_last_error() != JSON_ERROR_NONE)
-        {
+        if (json_last_error() != JSON_ERROR_NONE) {
             return false;
         }
-        
+
         return true;
     }
 
     public function validate($plonkJson)
     {
         $this->plonk = null;
-        
-        if(empty($plonkJson))
-        {
+
+        if (empty($plonkJson)) {
             return false;
         }
 
@@ -54,8 +53,7 @@ class Plonk implements PlonkInterface {
 
     public function byName($name, $plonkJson = null)
     {
-        if(!$this->validate($plonkJson))
-        {
+        if (!$this->validate($plonkJson)) {
             return '';
         }
 
@@ -68,25 +66,23 @@ class Plonk implements PlonkInterface {
 
     public function smallest($plonkJson = null)
     {
-        if(!$this->validate($plonkJson))
-        {
+        if (!$this->validate($plonkJson)) {
             return '';
         }
 
         $base = rtrim(config('plonk.output.paths.base'), '/');
         $width = PHP_INT_MAX;
 
-        foreach($this->plonk->variations as $key => $value)
-        {
-            if($value->width < $width)
-            {
+        dd($this->plonk);
+
+        foreach ($this->plonk->variations as $key => $value) {
+            if ($value->width < $width) {
                 $width = $value->width;
                 $select = $value;
             }
         }
 
-        if(is_null($select))
-        {
+        if (is_null($select)) {
             return '';
         }
 
@@ -95,25 +91,21 @@ class Plonk implements PlonkInterface {
 
     public function largest($plonkJson = null)
     {
-        if(!$this->validate($plonkJson))
-        {
+        if (!$this->validate($plonkJson)) {
             return '';
         }
 
         $base = rtrim(config('plonk.output.paths.base'), '/');
         $width = 0;
 
-        foreach($this->plonk->variations as $key => $value)
-        {
-            if($value->width > $width)
-            {
+        foreach ($this->plonk->variations as $key => $value) {
+            if ($value->width > $width) {
                 $width = $value->width;
                 $select = $value;
             }
         }
 
-        if(is_null($select))
-        {
+        if (is_null($select)) {
             return '';
         }
 
@@ -122,8 +114,7 @@ class Plonk implements PlonkInterface {
 
     public function original($plonkJson = null)
     {
-        if(!$this->validate($plonkJson))
-        {
+        if (!$this->validate($plonkJson)) {
             return '';
         }
 
@@ -134,8 +125,7 @@ class Plonk implements PlonkInterface {
 
     public function alt($plonkJson = null)
     {
-        if(!$this->validate($plonkJson))
-        {
+        if (!$this->validate($plonkJson)) {
             return '';
         }
 

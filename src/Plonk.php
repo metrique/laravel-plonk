@@ -73,8 +73,6 @@ class Plonk implements PlonkInterface
         $base = rtrim(config('plonk.output.paths.base'), '/');
         $width = PHP_INT_MAX;
 
-        dd($this->plonk);
-
         foreach ($this->plonk->variations as $key => $value) {
             if ($value->width < $width) {
                 $width = $value->width;

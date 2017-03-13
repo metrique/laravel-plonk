@@ -10,7 +10,7 @@ use Metrique\Plonk\Repositories\Contracts\PlonkRepositoryInterface;
 use Metrique\Plonk\Repositories\Contracts\PlonkStoreRepositoryInterface;
 use Metrique\Plonk\Repositories\HookRepository;
 use Metrique\Plonk\Repositories\PlonkRepositoryEloquent;
-use Metrique\Plonk\Repositories\PlonkStoreRepositoryWeird;
+use Metrique\Plonk\Repositories\PlonkStoreRepositoryEloquent;
 use Sofa\Eloquence\ServiceProvider as EloquenceServiceProvider;
 
 class PlonkServiceProvider extends ServiceProvider
@@ -121,7 +121,7 @@ class PlonkServiceProvider extends ServiceProvider
     {
         $this->app->bind(
             PlonkStoreRepositoryInterface::class,
-            PlonkStoreRepositoryWeird::class
+            PlonkStoreRepositoryEloquent::class
         );
     }
 

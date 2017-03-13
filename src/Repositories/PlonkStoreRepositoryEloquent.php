@@ -158,7 +158,14 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
         fwrite($fileHandler, $fileContents);
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $this->file = new \Symfony\Component\HttpFoundation\File\UploadedFile($file, basename($file), finfo_file($finfo, $file), filesize($file), null, true);
+        $this->file = new \Symfony\Component\HttpFoundation\File\UploadedFile(
+            $file,
+            basename($file),
+            finfo_file($finfo, $file),
+            filesize($file),
+            null,
+            true
+        );
         $this->request->files->replace(['file' => $this->file]);
 
         fclose($fileHandler);
@@ -204,7 +211,14 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
         $this->request = new Request();
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $uploadedFile = new \Symfony\Component\HttpFoundation\File\UploadedFile($file, basename($file), finfo_file($finfo, $file), filesize($file), null, true);
+        $uploadedFile = new \Symfony\Component\HttpFoundation\File\UploadedFile(
+            $file,
+            basename($file),
+            finfo_file($finfo, $file),
+            filesize($file),
+            null,
+            true
+        );
         $this->request->files->replace(['file' => $uploadedFile]);
 
         $this->request->merge([
@@ -380,19 +394,24 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
                         $constraint->aspectRatio();
                         $constraint->upsize();
                     });
-                break;
+                    break;
 
                 case PlonkOrientation::PORTRAIT:
                     $image->resize(null, $value['height'], function ($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();
                     });
-                break;
+                    break;
             }
 
             // Store new images.
             if (PlonkMime::toExtension($this->file->getClientMimeType()) == 'image/jpeg') {
-                $data = (string) $image->encode(PlonkMime::toExtension($this->file->getClientMimeType()), $value['quality']);
+                $data = (string) $image->encode(
+                    PlonkMime::toExtension(
+                        $this->file->getClientMimeType()
+                    ),
+                    $value['quality']
+                );
             } else {
                 $data = (string) $image->encode(PlonkMime::toExtension($this->file->getClientMimeType()));
             }
@@ -460,7 +479,6 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
         ]);
 
         foreach ($images as $key => $value) {
-
             // Search for existing named entry.
             $variation = PlonkVariation::firstOrCreate([
                 'name' => $value['name'],

@@ -24,8 +24,8 @@ class PlonkUpdateRequest extends Request
     public function rules()
     {
         return [
-            'title' => 'required|min:3|max:255',
-            'alt' => 'required|min:3|max:255',
+            'title' => 'required|min:3|max:191',
+            'alt' => 'required|min:3|max:191',
         ];
     }
 }

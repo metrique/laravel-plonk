@@ -4,12 +4,9 @@ namespace Metrique\Plonk\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
 use Metrique\Plonk\Eloquent\PlonkVariation;
-use Sofa\Eloquence\Eloquence;
 
 class PlonkAsset extends Model
 {
-    use Eloquence;
-
     protected $fillable = [
         'params',
         'hash',

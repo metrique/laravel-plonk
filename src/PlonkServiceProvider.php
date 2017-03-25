@@ -11,7 +11,6 @@ use Metrique\Plonk\Repositories\Contracts\PlonkStoreRepositoryInterface;
 use Metrique\Plonk\Repositories\HookRepository;
 use Metrique\Plonk\Repositories\PlonkRepositoryEloquent;
 use Metrique\Plonk\Repositories\PlonkStoreRepositoryEloquent;
-use Sofa\Eloquence\ServiceProvider as EloquenceServiceProvider;
 
 class PlonkServiceProvider extends ServiceProvider
 {
@@ -51,9 +50,6 @@ class PlonkServiceProvider extends ServiceProvider
 
         // Commands
         $this->registerCommands();
-
-        // Eloquence
-        $this->registerEloquence();
     }
 
     public function bootCommands()
@@ -81,8 +77,14 @@ class PlonkServiceProvider extends ServiceProvider
     public function bootRoutes()
     {
         if (! $this->app->routesAreCached()) {
-            require __DIR__.'/Routes/api.php';
-            require __DIR__.'/Routes/web.php';
+            // TODO
+            if (config('plonk.routes.api')) {
+                require __DIR__.'/Routes/api.php';
+            }
+            
+            if (config('plonk.routes.web')) {
+                require __DIR__.'/Routes/web.php';
+            }
         }
     }
 
@@ -94,11 +96,6 @@ class PlonkServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/Resources/views' => resource_path('views/vendor/laravel-plonk'),
         ], 'laravel-plonk');
-    }
-
-    public function registerEloquence()
-    {
-        $this->app->register(EloquenceServiceProvider::class);
     }
 
     protected function registerHookRepository()

@@ -1,62 +1,89 @@
 @extends('laravel-plonk::master')
 
-@section('content')
+@section('body')
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
 
-<div class="row">
-	<h1>Plonk</h1>
-	<p>Select a file...</p>
-	<p>
-		<a href="{{ route('plonk.create') }}" class="button small"><i class="fa fa-lg fa-plus"></i> Upload a new image</a>
-	</p>
-</div>
+                <div class="row">
+                    <div class="col-md-8">
+                        {{-- <form action="{{ request()->url() }}" class="form-inline" method="GET">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="search" placeholder="Search..." value="{{ request()->query('search') }}">
+                            </div>
+                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i> Search</button>
+                            @if(request()->has('search'))
+                                <a href="{{ route('plonk.index') }}"><i class="fa fa-times"></i> Clear search</a>
+                            @endif
+                        </form> --}}
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-right">
+                            <a href="{{ route('plonk.create') }}" class="btn btn-primary">
+                                Upload an image
+                            </a>
+                        </p>
+                    </div>
+                </div>
 
-<div class="row">
-	<h2>Assets</h2>
-	@if(count($assets) < 1)
-		<p>No assets found, sorry!</p>
-	@else
+                @if(count($assets) < 1)
+                    <p>No images found. <a href="{{ route($routes['create']) }}">Upload an image.</a></p>
+                @else
+                @endif
 
-	<form action="{{ request()->url() }}" method="get">
-		<div class="row collapse postfix-round">
-			<div class="small-8 columns">
-				<input type="text" name="search" placeholder="Search...">
-			</div>
-			<div class="small-2 columns">
-				<button type="submit" class="button postfix"><i class="fa fa-search"></i> Search</button>
-			</div>
-			<div class="small-2 columns">
-				<a href="{{ route('plonk.index') }}" class="button postfix"><i class="fa fa-times"></i> Clear</a>
-			</div>
-		</div>
-	</form>
+                @foreach ($assets as $key => $value)
 
-	<fieldset>
-		<ul class="small-block-grid-4">
-			@foreach ($assets as $key => $value)
-				<li>
-					<p>
-						<a class="th" href="{{ route('plonk.show', $value->id) }}">
-							<img src="{{ $cdnify->cdn() . '/plonk/originals/' . $value->hash . '.' . $value->extension }}" width="100%" class="img-rounded">
-						</a>
-					</p>
-					<p>
-						<form method="POST" action="{{ route('plonk.destroy', $value->id) }}">
-							<a href="{{ route('plonk.show', $value->id) }}" class="button tiny"><i class="fa fa-lg fa-eye"></i></a>
-							<a href="{{ route('plonk.edit', $value->id) }}" class="button tiny"><i class="fa fa-lg fa-pencil"></i></a>
-							{!! csrf_field() !!}
-							<input type="hidden" name="_method" value="DELETE">
-							<button type="submit" class="tiny" data-role="destroy"><i class="fa fa-lg fa-trash"></i></button>
-						</form>
-					</p>
-				</li>
-			@endforeach
-		</ul>
-	</fieldset>
-	@endif
-</div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    {{ $value->title }}
+                                </div>
+                                <div class="col-md-4 text-right">
+                                    <form method="POST" action="{{ route('plonk.destroy', $value->id) }}">
+                                        {!! csrf_field() !!}
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button type="submit" class="btn btn-xs btn-danger" data-role="destroy">
+                                            <i class="fa fa-fw fa-trash"></i>
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <img src="{{ $cdnify->cdn() . Plonk::smallest($value) }}" width="100%" class="img-rounded img-responsive">
+                        </div>
 
-<div class="row pagination-centered">
-	{!! $assets->links() !!}
-</div>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <i class="fa fa-fw fa-link"></i> Small
+                                        <code>{{ $cdnify->cdn() . Plonk::smallest($value) }}</code>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <i class="fa fa-fw fa-link"></i> Large
+                                        <code>{{ $cdnify->cdn() . Plonk::largest($value) }}</code>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="{{ route('plonk.edit', $value->id) }}">
+                                    <i class="fa fa-fw fa-tag" aria-hidden="true"></i>
+                                    Edit tags
+                                </a>
+                            </li>
+                        </ul>
 
+                    </div>
+                @endforeach
+
+                <div class="row text-center">
+                    {!! $assets->links() !!}
+                </div>
+
+            </div>
+        </div>
+    </div>
 @endsection

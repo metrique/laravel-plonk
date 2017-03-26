@@ -70,11 +70,16 @@ return [
     | Set the disk and paths that Plonk should use for storing images.
     |
     */
-
+    
+    'input' => [
+        'paths' => [
+            'base' => '/plonk',
+        ]
+    ],
     'output' => [
         'disk' => 's3',
         'paths' => [
-            'base' => '/plonk',
+            'base' => '/public/plonk',
             'originals' => '/originals',
         ]
     ],

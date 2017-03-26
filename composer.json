@@ -1,6 +1,6 @@
 {
     "name": "metrique/laravel-plonk",
-    "description": "Library for image management in Laravel 5.",
+    "description": "Library for image management in Laravel 5.4",
     "type": "Library",
     "license": "MIT",
     "authors": [
@@ -15,10 +15,10 @@
         }
     },
     "require-dev": {
-        "php": ">=5.6.4"
+        "php": ">=5.6.4",
     },
     "require": {
         "intervention/image": "^2.3",
-        "league/flysystem-aws-s3-v3": "~1.0",
+        "league/flysystem-aws-s3-v3": "~1.0"
     }
 }

@@ -15,7 +15,7 @@ use Metrique\Plonk\Support\PlonkMime;
 use Metrique\Plonk\Repositories\PlonkStoreInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class PlonkStoreEloquent implements PlonkStoreInterface
+class PlonkStore implements PlonkStoreInterface
 {
     /**
      * Uploaded file

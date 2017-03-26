@@ -6,7 +6,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Metrique\Plonk\Repositories\Contracts\HookRepositoryInterface as Hook;
+use Metrique\Plonk\Repositories\HookInterface as Hook;
 
 class PlonkBaseController extends BaseController
 {

@@ -5,12 +5,12 @@ namespace Metrique\Plonk;
 use Illuminate\Support\ServiceProvider;
 use Metrique\Plonk\Commands\PlonkMigrationsCommand;
 use Metrique\Plonk\Commands\PlonkBulkCommand;
-use Metrique\Plonk\Repositories\Contracts\HookRepositoryInterface;
-use Metrique\Plonk\Repositories\Contracts\PlonkRepositoryInterface;
-use Metrique\Plonk\Repositories\Contracts\PlonkStoreRepositoryInterface;
-use Metrique\Plonk\Repositories\HookRepository;
-use Metrique\Plonk\Repositories\PlonkRepositoryEloquent;
-use Metrique\Plonk\Repositories\PlonkStoreRepositoryEloquent;
+use Metrique\Plonk\Repositories\HookInterface;
+use Metrique\Plonk\Repositories\PlonkInterface;
+use Metrique\Plonk\Repositories\PlonkStoreInterface;
+use Metrique\Plonk\Repositories\Hook;
+use Metrique\Plonk\Repositories\Plonk;
+use Metrique\Plonk\Repositories\PlonkStore;
 
 class PlonkServiceProvider extends ServiceProvider
 {
@@ -44,9 +44,9 @@ class PlonkServiceProvider extends ServiceProvider
     public function register()
     {
         // Repositories
-        $this->registerHookRepository();
-        $this->registerPlonkIndexRepository();
-        $this->registerPlonkStoreRepository();
+        $this->registerHook();
+        $this->registerPlonk();
+        $this->registerPlonkStore();
 
         // Commands
         $this->registerCommands();
@@ -98,27 +98,27 @@ class PlonkServiceProvider extends ServiceProvider
         ], 'laravel-plonk');
     }
 
-    protected function registerHookRepository()
+    protected function registerHook()
     {
         $this->app->bind(
-            HookRepositoryInterface::class,
-            HookRepository::class
+            HookInterface::class,
+            Hook::class
         );
     }
 
-    public function registerPlonkIndexRepository()
+    public function registerPlonk()
     {
         $this->app->bind(
-            PlonkRepositoryInterface::class,
-            PlonkRepositoryEloquent::class
+            PlonkInterface::class,
+            Plonk::class
         );
     }
 
-    public function registerPlonkStoreRepository()
+    public function registerPlonkStore()
     {
         $this->app->bind(
-            PlonkStoreRepositoryInterface::class,
-            PlonkStoreRepositoryEloquent::class
+            PlonkStoreInterface::class,
+            PlonkStore::class
         );
     }
 

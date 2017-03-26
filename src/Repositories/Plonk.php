@@ -3,11 +3,10 @@
 namespace Metrique\Plonk\Repositories;
 
 use Metrique\Plonk\Eloquent\PlonkAsset;
-use Metrique\Plonk\Repositories\Contracts\PlonkRepositoryInterface;
+use Metrique\Plonk\Repositories\PlonkInterface;
 
-class PlonkRepositoryEloquent implements PlonkRepositoryInterface
+class Plonk implements PlonkInterface
 {
-    protected $modelClassName = 'Metrique\Plonk\Eloquent\PlonkAsset';
     protected $filteredQuerystring = [];
 
     /**

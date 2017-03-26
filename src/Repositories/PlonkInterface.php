@@ -1,11 +1,11 @@
 <?php
 
-namespace Metrique\Plonk\Repositories\Contracts;
+namespace Metrique\Plonk\Repositories;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
-interface PlonkRepositoryInterface
+interface PlonkInterface
 {
     /**
      * Find a plonk asset by ID, and include all image varations.

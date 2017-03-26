@@ -1,10 +1,10 @@
 <?php
 
-namespace Metrique\Plonk\Repositories\Contracts;
+namespace Metrique\Plonk\Repositories;
 
 use Illuminate\Support\Collection;
 
-interface PlonkStoreRepositoryInterface
+interface PlonkStoreInterface
 {
 
     /**

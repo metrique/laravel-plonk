@@ -12,10 +12,10 @@ use Metrique\Plonk\Eloquent\PlonkVariation;
 use Metrique\Plonk\Exceptions\PlonkException;
 use Metrique\Plonk\Support\PlonkOrientation;
 use Metrique\Plonk\Support\PlonkMime;
-use Metrique\Plonk\Repositories\Contracts\PlonkStoreRepositoryInterface;
+use Metrique\Plonk\Repositories\PlonkStoreInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
+class PlonkStoreEloquent implements PlonkStoreInterface
 {
     /**
      * Uploaded file

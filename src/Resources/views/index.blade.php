@@ -7,7 +7,7 @@
 
                 <div class="row">
                     <div class="col-md-8">
-                        {{-- <form action="{{ request()->url() }}" class="form-inline" method="GET">
+                        <form action="{{ request()->url() }}" class="form-inline" method="GET">
                             <div class="form-group">
                                 <input class="form-control" type="text" name="search" placeholder="Search..." value="{{ request()->query('search') }}">
                             </div>
@@ -15,7 +15,7 @@
                             @if(request()->has('search'))
                                 <a href="{{ route('plonk.index') }}"><i class="fa fa-times"></i> Clear search</a>
                             @endif
-                        </form> --}}
+                        </form>
                     </div>
                     <div class="col-md-4">
                         <p class="text-right">

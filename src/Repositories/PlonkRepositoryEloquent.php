@@ -53,13 +53,14 @@ class PlonkRepositoryEloquent implements PlonkRepositoryInterface
     public function allFiltered()
     {
         $plonkAsset = PlonkAsset::with('variations')->where('published', 1)->orderBy('created_at', 'desc');
-
+        
         $this->filterRequest()->each(function ($value, $key) use ($plonkAsset) {
             $cropTolerance = config('plonk.crop_tolerance');
 
             switch ($key) {
                 case 'search':
-                    $plonkAsset = $plonkAsset->search($value);
+                    $search = PlonkAsset::search($value)->get()->pluck(['id']);
+                    $plonkAsset->whereIn('id', $search);
                     break;
 
                 case 'ratio':

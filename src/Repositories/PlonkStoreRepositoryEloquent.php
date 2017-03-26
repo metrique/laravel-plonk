@@ -127,6 +127,7 @@ class PlonkStoreRepositoryEloquent implements PlonkStoreRepositoryInterface
 
         collect(config('plonk.size'))->each(function ($value, $key) use ($images) {
             $image = $this->image;
+            
             $image->backup();
             $image->orientate();
 

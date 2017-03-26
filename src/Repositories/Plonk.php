@@ -8,7 +8,20 @@ use Metrique\Plonk\Repositories\PlonkInterface;
 class Plonk implements PlonkInterface
 {
     protected $filteredQuerystring = [];
-
+    protected $cacheTtl = 60;
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function resource(string $hash)
+    {
+        $signature = sprintf('%s::%s %s', __CLASS__, __FUNCTION__, $hash);
+        
+        return cache()->remember(sha1($signature), $this->cacheTtl, function () use ($hash) {
+            return $this->findByHash($hash)->resource;
+        });
+    }
+    
     /**
      * {@inheritdoc}
      */

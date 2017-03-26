@@ -8,6 +8,13 @@ use Illuminate\Support\Collection;
 interface PlonkInterface
 {
     /**
+     * Construct a plonk resource from a given hash id.
+     * @param  string  $hash
+     * @return Collection
+     */
+    public function resource(string $hash);
+    
+    /**
      * Find a plonk asset by ID, and include all image varations.
      *
      * @param  integer $id

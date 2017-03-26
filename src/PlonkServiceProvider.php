@@ -11,6 +11,7 @@ use Metrique\Plonk\Repositories\PlonkStoreInterface;
 use Metrique\Plonk\Repositories\Hook;
 use Metrique\Plonk\Repositories\Plonk;
 use Metrique\Plonk\Repositories\PlonkStore;
+use Metrique\Plonk\PlonkViewComposer;
 
 class PlonkServiceProvider extends ServiceProvider
 {
@@ -36,6 +37,9 @@ class PlonkServiceProvider extends ServiceProvider
         $this->bootMigrations();
         $this->bootRoutes();
         $this->bootViews();
+        
+        // View composer
+        view()->composer('*', PlonkViewComposer::class);
     }
 
     /**

@@ -57,6 +57,10 @@
 
                         <ul class="list-group">
                             <li class="list-group-item">
+                                <i class="fa fa-fw fa-id-card-o"></i> ID
+                                <code>{{ $value->hash }}</code>
+                            </li>
+                            <li class="list-group-item">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <i class="fa fa-fw fa-link"></i> Small

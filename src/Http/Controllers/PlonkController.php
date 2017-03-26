@@ -57,7 +57,7 @@ class PlonkController extends PlonkBaseController
     public function create(PlonkStoreRepository $plonk)
     {
         $this->mergeViewData([
-            'ratios' => $plonk->getCropRatios(),
+            'ratios' => config('plonk.crop'),
         ]);
 
         return $this->viewWithData($this->views['create']);

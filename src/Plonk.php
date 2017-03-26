@@ -2,6 +2,7 @@
 
 namespace Metrique\Plonk;
 
+use Illuminate\Foundation\Application;
 use Metrique\Plonk\Contracts\PlonkInterface;
 use Stringy\Stringy;
 
@@ -23,7 +24,7 @@ class Plonk implements PlonkInterface
      * @param \Illuminate\Foundation\Application $app
      * @return void
      */
-    public function __construct(\Illuminate\Foundation\Application $app)
+    public function __construct(Application $app)
     {
         $this->app = $app;
     }
@@ -57,7 +58,7 @@ class Plonk implements PlonkInterface
             return '';
         }
 
-        $base = rtrim(config('plonk.output.paths.base'), '/');
+        $base = rtrim(config('plonk.input.paths.base'), '/');
         $key = array_search($name, array_column($this->plonkArray['variations'], 'name'));
         $select = $this->plonk->variations[$key];
 
@@ -70,7 +71,7 @@ class Plonk implements PlonkInterface
             return '';
         }
 
-        $base = rtrim(config('plonk.output.paths.base'), '/');
+        $base = rtrim(config('plonk.input.paths.base'), '/');
         $width = PHP_INT_MAX;
 
         foreach ($this->plonk->variations as $key => $value) {
@@ -93,7 +94,7 @@ class Plonk implements PlonkInterface
             return '';
         }
 
-        $base = rtrim(config('plonk.output.paths.base'), '/');
+        $base = rtrim(config('plonk.input.paths.base'), '/');
         $width = 0;
 
         foreach ($this->plonk->variations as $key => $value) {
@@ -116,9 +117,9 @@ class Plonk implements PlonkInterface
             return '';
         }
 
-        $base = rtrim(config('plonk.output.paths.base'), '/');
+        $base = rtrim(config('plonk.input.paths.base'), '/');
 
-        return implode('/', [$base, ltrim(config('plonk.output.paths.originals'), '/'), $this->plonk->hash.'.'.$this->plonk->extension]);
+        return implode('/', [$base, ltrim(config('plonk.input.paths.originals'), '/'), $this->plonk->hash.'.'.$this->plonk->extension]);
     }
 
     public function alt($plonkJson = null)

@@ -3,6 +3,7 @@
 namespace Metrique\Plonk;
 
 use Illuminate\Support\Facades\Facade;
+use Metrique\Plonk\Plonk;
 
 class PlonkFacade extends Facade
 {
@@ -13,6 +14,6 @@ class PlonkFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return '\Metrique\Plonk\Plonk';
+        return Plonk::class;
     }
 }

@@ -62,7 +62,11 @@ class Plonk implements PlonkInterface
         $key = array_search($name, array_column($this->plonkArray['variations'], 'name'));
         $select = $this->plonk->variations[$key];
 
-        return implode('/', [$base, str_limit($this->plonk->hash, 4), $this->plonk->hash.'-'.$select->name.'.'.$this->plonk->extension]);
+        return implode('/', [
+            $base,
+            str_limit($this->plonk->hash, 4),
+            $this->plonk->hash.'-'.$select->name.'.'.$this->plonk->extension
+        ]);
     }
 
     public function smallest($plonkJson = null)
@@ -85,7 +89,11 @@ class Plonk implements PlonkInterface
             return '';
         }
 
-        return implode('/', [$base, str_limit($this->plonk->hash, 4), $this->plonk->hash.'-'.$select->name.'.'.$this->plonk->extension]);
+        return implode('/', [
+            $base,
+            str_limit($this->plonk->hash, 4),
+            $this->plonk->hash.'-'.$select->name.'.'.$this->plonk->extension
+        ]);
     }
 
     public function largest($plonkJson = null)
@@ -108,7 +116,11 @@ class Plonk implements PlonkInterface
             return '';
         }
 
-        return implode('/', [$base, str_limit($this->plonk->hash, 4), $this->plonk->hash.'-'.$select->name.'.'.$this->plonk->extension]);
+        return implode('/', [
+            $base,
+            str_limit($this->plonk->hash, 4),
+            $this->plonk->hash.'-'.$select->name.'.'.$this->plonk->extension
+        ]);
     }
 
     public function original($plonkJson = null)
@@ -119,7 +131,11 @@ class Plonk implements PlonkInterface
 
         $base = rtrim(config('plonk.input.paths.base'), '/');
 
-        return implode('/', [$base, ltrim(config('plonk.input.paths.originals'), '/'), $this->plonk->hash.'.'.$this->plonk->extension]);
+        return implode('/', [
+            $base,
+            ltrim(config('plonk.input.paths.originals'), '/'),
+            $this->plonk->hash.'.'.$this->plonk->extension
+        ]);
     }
 
     public function alt($plonkJson = null)

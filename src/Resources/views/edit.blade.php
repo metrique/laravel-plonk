@@ -9,7 +9,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">Edit tags</div>
                         <div class="panel-body">
-                            <img src="{{ $cdnify->cdn() . Plonk::smallest($asset) }}" width="100%" class="img-rounded img-responsive">
+                            <img src="{{ $cdnify->cdn() . $plonk->resource($asset->hash)->get('small') }}" width="100%" class="img-rounded img-responsive">
                         </div>
                         <div class="panel-body">
                             <form class="form-horizontal" role="form" accept="image/gif, image/jpeg, image/png" method="POST" action="{{ route('plonk.update', ['id' => $asset->id]) }}" enctype="multipart/form-data">

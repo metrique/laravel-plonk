@@ -43,6 +43,7 @@ class PlonkController extends PlonkBaseController
 
         $this->mergeViewData([
             'assets' => $assets,
+            'routes' => $this->routes,
         ]);
 
         return $this->viewWithData($this->views['index']);

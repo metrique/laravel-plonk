@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         <div class="panel-body">
-                            <img src="{{ $cdnify->cdn() . Plonk::smallest($value) }}" width="100%" class="img-rounded img-responsive">
+                            <img src="{{ $cdnify->cdn() . $plonk->resource($value->hash)->get('small') }}" width="100%" class="img-rounded img-responsive">
                         </div>
 
                         <ul class="list-group">
@@ -64,11 +64,11 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <i class="fa fa-fw fa-link"></i> Small
-                                        <code>{{ $cdnify->cdn() . Plonk::smallest($value) }}</code>
+                                        <code>{{ $cdnify->cdn() . $plonk->resource($value->hash)->get('small') }}</code>
                                     </div>
                                     <div class="col-md-6">
                                         <i class="fa fa-fw fa-link"></i> Large
-                                        <code>{{ $cdnify->cdn() . Plonk::largest($value) }}</code>
+                                        <code>{{ $cdnify->cdn() . $plonk->resource($value->hash)->get('large') }}</code>
                                     </div>
                                 </div>
                             </li>

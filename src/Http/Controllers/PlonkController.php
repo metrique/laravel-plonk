@@ -40,7 +40,7 @@ class PlonkController extends PlonkBaseController
             ->allFiltered()
             ->paginate(config('plonk.paginate.items'))
             ->appends($plonk->filterRequest()->toArray());
-
+        
         $this->mergeViewData([
             'assets' => $assets,
             'routes' => $this->routes,

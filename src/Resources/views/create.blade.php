@@ -9,7 +9,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">Upload an image</div>
                         <div class="panel-body">
-                            <form class="form-horizontal" role="form" accept="image/gif, image/jpeg, image/png" method="POST" action="{{ route('plonk.store') }}" enctype="multipart/form-data">
+                            <form class="form-horizontal" role="form" accept="image/gif, image/jpeg, image/png" method="POST" action="{{ route($routes['store']) }}" enctype="multipart/form-data">
                                 {{ csrf_field() }}
 
                                 <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }}">

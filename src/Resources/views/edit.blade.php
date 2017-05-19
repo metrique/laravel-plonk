@@ -12,7 +12,7 @@
                             <img src="{{ $cdnify->cdn() . $plonk->resource($asset->hash)->get('small') }}" width="100%" class="img-rounded img-responsive">
                         </div>
                         <div class="panel-body">
-                            <form class="form-horizontal" role="form" accept="image/gif, image/jpeg, image/png" method="POST" action="{{ route('plonk.update', ['id' => $asset->id]) }}" enctype="multipart/form-data">
+                            <form class="form-horizontal" role="form" accept="image/gif, image/jpeg, image/png" method="POST" action="{{ route($routes['update'], ['id' => $asset->id]) }}" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                 {{ method_field('PATCH') }}
 

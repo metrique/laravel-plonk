@@ -13,13 +13,13 @@
                             </div>
                             <button type="submit" class="btn btn-default"><i class="fa fa-search"></i> Search</button>
                             @if(request()->has('search'))
-                                <a href="{{ route('plonk.index') }}"><i class="fa fa-times"></i> Clear search</a>
+                                <a href="{{ route($routes['index']) }}"><i class="fa fa-times"></i> Clear search</a>
                             @endif
                         </form>
                     </div>
                     <div class="col-md-4">
                         <p class="text-right">
-                            <a href="{{ route('plonk.create') }}" class="btn btn-primary">
+                            <a href="{{ route($routes['create']) }}" class="btn btn-primary">
                                 Upload an image
                             </a>
                         </p>
@@ -40,7 +40,7 @@
                                     {{ $value->title }}
                                 </div>
                                 <div class="col-md-4 text-right">
-                                    <form method="POST" action="{{ route('plonk.destroy', $value->id) }}">
+                                    <form method="POST" action="{{ route($routes['destroy'], $value->id) }}">
                                         {!! csrf_field() !!}
                                         <input type="hidden" name="_method" value="DELETE">
                                         <button type="submit" class="btn btn-xs btn-danger" data-role="destroy">
@@ -73,7 +73,7 @@
                                 </div>
                             </li>
                             <li class="list-group-item">
-                                <a href="{{ route('plonk.edit', $value->id) }}">
+                                <a href="{{ route($routes['edit'], $value->id) }}">
                                     <i class="fa fa-fw fa-tag" aria-hidden="true"></i>
                                     Edit tags
                                 </a>

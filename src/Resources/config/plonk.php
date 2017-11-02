@@ -5,9 +5,10 @@ return [
     | Route settings
     |--------------------------------------------------------------------------
     |
-    | Disable routes and configure prefixes.
+    | Disable routes and configure url prefixes.
     |
     */
+    
     'routes' => [
         'api' => false,
         'web' => true,
@@ -18,6 +19,15 @@ return [
         'web' => '',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Crop settings
+    |--------------------------------------------------------------------------
+    |
+    | Set crop settings, for limiting uploads to a certain ratio.
+    |
+    */
+   
     'crop' => [
         '1' => '1',
         '16' => '9',
@@ -35,8 +45,8 @@ return [
     | and validation when storing images to Plonk.
     |
     */
-
-   'query' => [
+   
+    'query' => [
         'filter' => [
             'search',
             'ratio',
@@ -45,7 +55,7 @@ return [
         'store' => [
             'ratio',
         ],
-   ],
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -55,7 +65,7 @@ return [
     | A list of allowed mime types that can be used with plonk.
     |
     */
-
+   
     'mime' => [
         'image/gif',
         'image/jpeg',
@@ -70,7 +80,7 @@ return [
     | Set the disk and paths that Plonk should use for storing images.
     |
     */
-    
+   
     'input' => [
         'paths' => [
             'base' => '/plonk',

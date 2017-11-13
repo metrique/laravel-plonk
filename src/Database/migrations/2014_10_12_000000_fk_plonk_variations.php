@@ -14,6 +14,7 @@ class FkPlonkVariations extends Migration
     {
         Schema::table('plonk_variations', function (Blueprint $table) {
             $table->integer('plonk_assets_id')
+                ->nullable()
                 ->unsigned();
 
             $table->foreign('plonk_assets_id')

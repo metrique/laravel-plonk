@@ -31,31 +31,25 @@ class PlonkAsset extends Model
         'ratio',
         'published'
     ];
-
-    protected $searchableColumns = [
-        'title',
-        'alt'
-    ];
-
-    protected $table = 'plonk_assets';
-        
+    
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->getKey(),
+            'title' => $this->title,
+            'alt' => $this->alt,
+            'description' => $this->description,
+        ];
+    }
+    
     public function variations()
     {
         return $this->hasMany(PlonkVariation::class, 'plonk_assets_id');
-    }
-    
-    public function searchableAs()
-    {
-        return 'plonk';
-    }
-    
-    public function toSearchableArray()
-    {
-        return collect($this->toArray())->only([
-            'title',
-            'alt',
-            'description'
-        ]);
     }
     
     public function getResourceAttribute()

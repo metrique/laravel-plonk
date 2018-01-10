@@ -140,7 +140,7 @@ class PlonkStore implements PlonkStoreInterface
                     });
                     break;
 
-                case PlonkOrientation::LANDSCAPE:
+                case PlonkOrientation::PORTRAIT:
                     $image->resize(null, $value['height'], function ($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();

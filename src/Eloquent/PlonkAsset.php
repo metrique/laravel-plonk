@@ -62,22 +62,24 @@ class PlonkAsset extends Model
             'orientation',
             'ratio',
             'width',
-        ])->merge($this->variations->mapWithKeys(function ($item, $key) {
-            return  [
-                $item['name'] => [
-                    'path' => implode('/', [
-                        rtrim(config('plonk.input.paths.base'), '/'),
-                        str_limit($this->hash, 4),
-                        sprintf('%s-%s.%s', $this->hash, $item['name'], $this->extension)
-                    ]),
-                    'width' => $item['width'],
-                    'height' => $item['height'],
-                    'quality' => $item['quality']
-                ]
-            ];
-        }));
+        ])->merge([
+            'variations' => $this->variations->mapWithKeys(function ($item, $key) {
+                return  [
+                    $item['name'] => [
+                        'path' => implode('/', [
+                            rtrim(config('plonk.input.paths.base'), '/'),
+                            str_limit($this->hash, 4),
+                            sprintf('%s-%s.%s', $this->hash, $item['name'], $this->extension)
+                        ]),
+                        'width' => $item['width'],
+                        'height' => $item['height'],
+                        'quality' => $item['quality']
+                    ]
+                ];
+            })->toArray()
+        ]);
     }
-    
+        
     public function getSmallAttribute()
     {
         $width = PHP_INT_MAX;

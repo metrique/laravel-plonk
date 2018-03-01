@@ -77,6 +77,9 @@ class PlonkAsset extends Model
                     ]
                 ];
             })->toArray()
+        ])->merge([
+            'smallest' => $this->getSmallAttribute(),
+            'largest' => $this->getLargeAttribute(),
         ]);
     }
         

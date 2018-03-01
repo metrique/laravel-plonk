@@ -57,7 +57,6 @@ class PlonkAsset extends Model
         return collect($this->attributes)->only([
             'title',
             'alt',
-            'description',
             'height',
             'mime',
             'orientation',
@@ -65,11 +64,16 @@ class PlonkAsset extends Model
             'width',
         ])->merge($this->variations->mapWithKeys(function ($item, $key) {
             return  [
-                $item['name']=>implode('/', [
-                    rtrim(config('plonk.input.paths.base'), '/'),
-                    str_limit($this->hash, 4),
-                    sprintf('%s-%s.%s', $this->hash, $item['name'], $this->extension)
-                ])
+                $item['name'] => [
+                    'path' => implode('/', [
+                        rtrim(config('plonk.input.paths.base'), '/'),
+                        str_limit($this->hash, 4),
+                        sprintf('%s-%s.%s', $this->hash, $item['name'], $this->extension)
+                    ]),
+                    'width' => $item['width'],
+                    'height' => $item['height'],
+                    'quality' => $item['quality']
+                ]
             ];
         }));
     }

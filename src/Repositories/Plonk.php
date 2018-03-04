@@ -18,7 +18,13 @@ class Plonk implements PlonkInterface
         $signature = sprintf('%s::%s %s', __CLASS__, __FUNCTION__, $hash);
         
         return cache()->remember(sha1($signature), $this->cacheTtl, function () use ($hash) {
-            return $this->findByHash($hash)->resource;
+            $resource = $this->findByHash($hash);
+            
+            if (is_null($resource)) {
+                return false;
+            }
+            
+            return $resource->resource;
         });
     }
     

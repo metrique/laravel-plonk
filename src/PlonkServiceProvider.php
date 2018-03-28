@@ -16,10 +16,10 @@ use Metrique\Plonk\PlonkViewComposer;
 class PlonkServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
+    * Indicates if loading of the provider is deferred.
+    *
+    * @var bool
+    */
     protected $defer = false;
 
     public function __construct($app)
@@ -28,23 +28,24 @@ class PlonkServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap the application services.
-     */
+    * Bootstrap the application services.
+    */
     public function boot()
     {
+        $this->bootAssets();
         $this->bootCommands();
         $this->bootConfig();
         $this->bootMigrations();
         $this->bootRoutes();
         $this->bootViews();
-        
+
         // View composer
         view()->composer('*', PlonkViewComposer::class);
     }
 
     /**
-     * Register the application services.
-     */
+    * Register the application services.
+    */
     public function register()
     {
         // Repositories
@@ -85,7 +86,7 @@ class PlonkServiceProvider extends ServiceProvider
             if (config('plonk.routes.api')) {
                 require __DIR__.'/Routes/api.php';
             }
-            
+
             if (config('plonk.routes.web')) {
                 require __DIR__.'/Routes/web.php';
             }
@@ -99,6 +100,13 @@ class PlonkServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/Resources/views' => resource_path('views/vendor/laravel-plonk'),
+        ], 'laravel-plonk');
+    }
+
+    public function bootAssets()
+    {
+        $this->publishes([
+            __DIR__.'/Resources/assets' => resource_path('assets/vendor/laravel-plonk'),
         ], 'laravel-plonk');
     }
 
@@ -127,8 +135,8 @@ class PlonkServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the artisan commands.
-     */
+    * Register the artisan commands.
+    */
     public function registerCommands()
     {
         $this->app->singleton('command.metrique.plonk-bulk', function ($app) {

@@ -3,7 +3,7 @@
 @section('body')
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-8 offset-md-2">
 
                 <div class="row">
                     <div class="col-md-8">
@@ -11,7 +11,7 @@
                             <div class="form-group">
                                 <input class="form-control" type="text" name="search" placeholder="Search..." value="{{ request()->query('search') }}">
                             </div>
-                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i> Search</button>
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Search</button>
                             @if(request()->has('search'))
                                 <a href="{{ route($routes['index']) }}"><i class="fa fa-times"></i> Clear search</a>
                             @endif
@@ -33,8 +33,8 @@
 
                 @foreach ($assets as $key => $value)
 
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
+                    <div class="card">
+                        <div class="card-header">
                             <div class="row">
                                 <div class="col-md-8">
                                     {{ $value->title }}
@@ -51,11 +51,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel-body">
+                        <div class="card-body">
                             <img src="{{ $cdnify->cdn() . $plonk->resource($value->hash)->get('small') }}" width="100%" class="img-rounded img-responsive">
                         </div>
 
-                        <ul class="list-group">
+                        <ul class="list-group list-group-flush">
                             <li class="list-group-item">
                                 <i class="fa fa-fw fa-id-card-o"></i> ID
                                 <code>{{ $value->hash }}</code>

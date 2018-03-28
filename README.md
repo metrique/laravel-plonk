@@ -33,3 +33,21 @@ If you prefer more fine grained control then you may extend the `PlonkServicePro
 
 ### Views
 If you wish to customise the views for your own application then you may extend the PlonkController and change the views properties to reflect your own views. Copying the default plonk views makes a good base for building on.
+
+### Vue Component
+Browse and select images via the the included vue component. Enable api routes to use.
+
+#### Configuration
+| Property                   | Type    | Default       | Description                                                        |
+|----------------------------|---------|---------------|--------------------------------------------------------------------|
+| apiPath                    | String  | /api/plonk    | The path to plonk's api.                                           |
+| hashInputName              | String  | image         | The name of the input that holds the selected image plonk hash id. |
+| hashInputValue             | String  |               | The default value for the hash input.                              |
+| imagePath                  | String  |               | The image prefix path.                                             |
+| modalTitle                 | String  | Image Library | The title of the image library modal.                              |
+| openImageLibraryButtonText | String  | Select Image  | The button text that launches the image library.                   |
+| previewImgSrc              | String  |               | The default src for the preview image.                             |
+| removeImageButtonText      | String  | Remove Image  | The button text that removes an image.                             |
+| showHashInput              | Boolean | false         | Display the selected image input.                                  |
+| showPreviewImage           | Boolean | true          | Display a preview of the selected image.                           |
+| showSearch                 | Boolean | true          | Allow the image library to be searched.                            |

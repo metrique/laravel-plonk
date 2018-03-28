@@ -9,13 +9,13 @@ use Metrique\Plonk\Eloquent\PlonkVariation;
 class PlonkAsset extends Model
 {
     use Searchable;
-    
+
     protected $appends = [
         'resource',
         'small',
         'large',
     ];
-    
+
     protected $fillable = [
         'params',
         'hash',
@@ -31,7 +31,7 @@ class PlonkAsset extends Model
         'ratio',
         'published'
     ];
-    
+
     /**
      * Get the indexable data array for the model.
      *
@@ -46,12 +46,12 @@ class PlonkAsset extends Model
             'description' => $this->description,
         ];
     }
-    
+
     public function variations()
     {
         return $this->hasMany(PlonkVariation::class, 'plonk_assets_id');
     }
-    
+
     public function getResourceAttribute()
     {
         return collect($this->attributes)->only([
@@ -82,44 +82,44 @@ class PlonkAsset extends Model
             'largest' => $this->getLargeAttribute(),
         ]);
     }
-        
+
     public function getSmallAttribute()
     {
         $width = PHP_INT_MAX;
-        
+
         foreach ($this->variations as $key => $value) {
             if ($value->width < $width) {
                 $width = $value->width;
                 $select = $value;
             }
         }
-        
+
         if (!isset($select)) {
             return null;
         }
-        
+
         return implode('/', [
             rtrim(config('plonk.input.paths.base'), '/'),
             str_limit($this->hash, 4),
             sprintf('%s-%s.%s', $this->hash, $select->name, $this->extension)
         ]);
     }
-    
+
     public function getLargeAttribute()
     {
         $width = 0;
-        
+
         foreach ($this->variations as $key => $value) {
             if ($value->width > $width) {
                 $width = $value->width;
                 $select = $value;
             }
         }
-        
+
         if (!isset($select)) {
             return null;
         }
-        
+
         return implode('/', [
             rtrim(config('plonk.input.paths.base'), '/'),
             str_limit($this->hash, 4),

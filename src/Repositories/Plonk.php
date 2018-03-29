@@ -9,25 +9,25 @@ class Plonk implements PlonkInterface
 {
     protected $filteredQuerystring = [];
     protected $cacheTtl = 60;
-    
+
     /**
      * {@inheritdoc}
      */
     public function resource(string $hash)
     {
         $signature = sprintf('%s::%s %s', __CLASS__, __FUNCTION__, $hash);
-        
+
         return cache()->remember(sha1($signature), $this->cacheTtl, function () use ($hash) {
             $resource = $this->findByHash($hash);
-            
+
             if (is_null($resource)) {
                 return false;
             }
-            
+
             return $resource->resource;
         });
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -71,7 +71,7 @@ class Plonk implements PlonkInterface
     public function allFiltered()
     {
         $plonkAsset = PlonkAsset::with('variations')->where('published', 1)->orderBy('created_at', 'desc');
-        
+
         $this->filterRequest()->each(function ($value, $key) use ($plonkAsset) {
             $cropTolerance = config('plonk.crop_tolerance');
 

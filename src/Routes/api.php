@@ -1,7 +1,7 @@
 <?php
 /*
- * Plonk
- */
+* Plonk
+*/
 Route::group(['prefix' => config('plonk.prefix.api'), 'middleware' => 'api'], function () {
-    Route::resource('plonk', '\Metrique\Plonk\Http\Controllers\PlonkController');
+    Route::resource('plonk', '\Metrique\Plonk\Http\Controllers\Api\PlonkController', ['only' => ['index']]);
 });

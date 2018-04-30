@@ -52,7 +52,7 @@ class PlonkAsset extends Model
         return $this->hasMany(PlonkVariation::class, 'plonk_assets_id');
     }
 
-        public function getResourceAttribute()
+    public function getResourceAttribute()
     {
         $variations = $this->variations->mapWithKeys(function ($item, $key) {
             return  [
@@ -71,7 +71,7 @@ class PlonkAsset extends Model
         
         $sizes = $variations->mapWithKeys(function ($item, $key) {
             return [
-                'size.'.$key => $item['path']
+                'size.'.$key => config('plonk.url') . $item['path']
             ];
         });
         

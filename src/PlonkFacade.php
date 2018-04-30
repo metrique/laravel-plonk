@@ -13,6 +13,6 @@ class PlonkFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return '\Metrique\Plonk\PlonkRepository';
+        return '\Metrique\Plonk\Repositories\Plonk';
     }
 }

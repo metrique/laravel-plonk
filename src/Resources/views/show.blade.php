@@ -18,7 +18,7 @@
 			<h3 class="subheader">{{ $asset->alt }}</h3>
 
 			<p class="th">
-				<img src="{{ $cdnify->cdn() . '/plonk/originals/' . $asset->hash . '.' . $asset->extension }}" width="100%" class="img-rounded">
+				<img src="{{ '/plonk/originals/' . $asset->hash . '.' . $asset->extension }}" width="100%" class="img-rounded">
 			</p>
 			<label for="json-embed">Json embed</label>
 			<textarea name="json-embed" style="height: 200px;">{!! $asset->toJson() !!}</textarea>

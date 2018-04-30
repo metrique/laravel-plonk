@@ -8,7 +8,7 @@
                 <div class="card">
                     <div class="card-header">Edit tags</div>
                     <div class="card-body">
-                        <img src="{{ $cdnify->cdn() . $plonk->resource($asset->hash)->get('small') }}" width="100%" class="img-rounded img-responsive">
+                        <img src="{{ $plonk->resource($asset->hash)->get('smallest') }}" width="100%" class="img-rounded img-responsive">
                     </div>
                     <div class="card-body">
                         <form class="form-horizontal" role="form" accept="image/gif, image/jpeg, image/png" method="POST" action="{{ route($routes['update'], ['id' => $asset->id]) }}" enctype="multipart/form-data">

@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <img src="{{ $cdnify->cdn() . $plonk->resource($value->hash)->get('small') }}" width="100%" class="img-rounded img-responsive">
+                            <img src="{{ $plonk->resource($value->hash)->get('smallest') }}" width="100%" class="img-rounded img-responsive">
                         </div>
 
                         <ul class="list-group list-group-flush">
@@ -64,11 +64,11 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <i class="fa fa-fw fa-link"></i> Small
-                                        <code>{{ $cdnify->cdn() . $plonk->resource($value->hash)->get('small') }}</code>
+                                        <code>{{ $plonk->resource($value->hash)->get('smallest') }}</code>
                                     </div>
                                     <div class="col-md-6">
                                         <i class="fa fa-fw fa-link"></i> Large
-                                        <code>{{ $cdnify->cdn() . $plonk->resource($value->hash)->get('large') }}</code>
+                                        <code>{{ $plonk->resource($value->hash)->get('largest') }}</code>
                                     </div>
                                 </div>
                             </li>

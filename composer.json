@@ -27,7 +27,7 @@
                 "Metrique\\Plonk\\PlonkServiceProvider"
             ],
             "aliases": {
-                "CDNify": "Metrique\\Plonk\\PlonkFacade"
+                "Plonk": "Metrique\\Plonk\\PlonkFacade"
             }
         }
     }

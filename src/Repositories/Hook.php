@@ -2,9 +2,9 @@
 
 namespace Metrique\Plonk\Repositories;
 
-use Metrique\Plonk\Repositories\Contracts\HookRepositoryInterface;
+use Metrique\Plonk\Repositories\HookInterface;
 
-class HookRepository implements HookRepositoryInterface
+class Hook implements HookInterface
 {
     public $map = [
     ];

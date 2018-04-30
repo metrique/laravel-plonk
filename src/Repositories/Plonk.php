@@ -3,12 +3,30 @@
 namespace Metrique\Plonk\Repositories;
 
 use Metrique\Plonk\Eloquent\PlonkAsset;
-use Metrique\Plonk\Repositories\Contracts\PlonkRepositoryInterface;
+use Metrique\Plonk\Repositories\PlonkInterface;
 
-class PlonkRepositoryEloquent implements PlonkRepositoryInterface
+class Plonk implements PlonkInterface
 {
-    protected $modelClassName = 'Metrique\Plonk\Eloquent\PlonkAsset';
     protected $filteredQuerystring = [];
+    protected $cacheTtl = 60;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resource(string $hash)
+    {
+        $signature = sprintf('%s::%s %s', __CLASS__, __FUNCTION__, $hash);
+
+        return cache()->remember(sha1($signature), $this->cacheTtl, function () use ($hash) {
+            $resource = $this->findByHash($hash);
+
+            if (is_null($resource)) {
+                return false;
+            }
+
+            return $resource->resource;
+        });
+    }
 
     /**
      * {@inheritdoc}
@@ -52,14 +70,15 @@ class PlonkRepositoryEloquent implements PlonkRepositoryInterface
      */
     public function allFiltered()
     {
-        $plonkAsset = PlonkAsset::with('variations')->where('published', 1);
+        $plonkAsset = PlonkAsset::with('variations')->where('published', 1)->orderBy('created_at', 'desc');
 
         $this->filterRequest()->each(function ($value, $key) use ($plonkAsset) {
             $cropTolerance = config('plonk.crop_tolerance');
-            
+
             switch ($key) {
                 case 'search':
-                    $plonkAsset = $plonkAsset->search($value);
+                    $search = PlonkAsset::search($value)->get()->pluck(['id']);
+                    $plonkAsset->whereIn('id', $search);
                     break;
 
                 case 'ratio':
@@ -83,7 +102,7 @@ class PlonkRepositoryEloquent implements PlonkRepositoryInterface
      */
     public function publish($id)
     {
-        return Plonk::find($id)->update(['published' => 1]);
+        return PlonkAsset::find($id)->update(['published' => 1]);
     }
 
     /**
@@ -91,6 +110,17 @@ class PlonkRepositoryEloquent implements PlonkRepositoryInterface
      */
     public function unpublish($id)
     {
-        return Plonk::find($id)->update(['published' => 0]);
+        return PlonkAsset::find($id)->update(['published' => 0]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update($id, $params)
+    {
+        return PlonkAsset::find($id)->update([
+            'title' => $params['title'],
+            'alt' => $params['alt'],
+        ]);
     }
 }

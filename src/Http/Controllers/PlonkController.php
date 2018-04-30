@@ -4,12 +4,11 @@ namespace Metrique\Plonk\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Metrique\Plonk\Exceptions\PlonkException;
 use Metrique\Plonk\Http\Controllers\PlonkBaseController;
 use Metrique\Plonk\Http\Requests\PlonkStoreRequest;
 use Metrique\Plonk\Http\Requests\PlonkUpdateRequest;
-use Metrique\Plonk\Repositories\Contracts\PlonkRepositoryInterface as PlonkRepository;
-use Metrique\Plonk\Repositories\Contracts\PlonkStoreRepositoryInterface as PlonkStoreRepository;
+use Metrique\Plonk\Repositories\PlonkInterface as Plonk;
+use Metrique\Plonk\Repositories\PlonkStoreInterface as PlonkStore;
 
 class PlonkController extends PlonkBaseController
 {
@@ -35,16 +34,16 @@ class PlonkController extends PlonkBaseController
      *
      * @return Response
      */
-    public function index(PlonkRepository $plonk, Request $request)
+    public function index(Plonk $plonk, Request $request)
     {
-        // Get Plonk Items
         $assets = $plonk
             ->allFiltered()
             ->paginate(config('plonk.paginate.items'))
             ->appends($plonk->filterRequest()->toArray());
-
+        
         $this->mergeViewData([
             'assets' => $assets,
+            'routes' => $this->routes,
         ]);
 
         return $this->viewWithData($this->views['index']);
@@ -55,10 +54,10 @@ class PlonkController extends PlonkBaseController
      *
      * @return Response
      */
-    public function create(PlonkStoreRepository $plonk)
+    public function create(PlonkStore $plonk)
     {
         $this->mergeViewData([
-            'ratios' => $plonk->getCropRatios(),
+            'ratios' => config('plonk.crop'),
         ]);
 
         return $this->viewWithData($this->views['create']);
@@ -70,7 +69,7 @@ class PlonkController extends PlonkBaseController
      * @param  Request  $request
      * @return Response
      */
-    public function store(PlonkStoreRequest $request, PlonkStoreRepository $plonk)
+    public function store(PlonkStoreRequest $request, PlonkStore $plonk)
     {
         $plonk->store();
 
@@ -83,7 +82,7 @@ class PlonkController extends PlonkBaseController
      * @param  int  $id
      * @return Response
      */
-    public function show($id, PlonkRepository $plonk)
+    public function show($id, Plonk $plonk)
     {
         $this->mergeViewData([
             'asset' => $plonk->find($id)
@@ -98,7 +97,7 @@ class PlonkController extends PlonkBaseController
      * @param  int  $id
      * @return Response
      */
-    public function edit($id, PlonkRepository $plonk)
+    public function edit($id, Plonk $plonk)
     {
         $this->mergeViewData([
             'asset' => $plonk->find($id)
@@ -114,7 +113,7 @@ class PlonkController extends PlonkBaseController
      * @param  int  $id
      * @return Response
      */
-    public function update(PlonkUpdateRequest $request, $id, PlonkRepository $plonk)
+    public function update(PlonkUpdateRequest $request, $id, Plonk $plonk)
     {
         $plonk->update($id, [
             'title' => $request->input('title'),
@@ -130,7 +129,7 @@ class PlonkController extends PlonkBaseController
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id, PlonkRepository $plonk)
+    public function destroy($id, Plonk $plonk)
     {
         $plonk->unpublish($id);
 

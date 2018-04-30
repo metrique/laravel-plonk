@@ -6,5 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class PlonkVariation extends Model
 {
-	protected $fillable = ['name', 'width', 'height', 'ratio', 'quality', 'plonk_assets_id'];
+    protected $fillable = [
+        'name',
+        'width',
+        'height',
+        'ratio',
+        'quality',
+        'plonk_assets_id'
+    ];
 }

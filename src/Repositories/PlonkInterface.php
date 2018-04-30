@@ -1,12 +1,19 @@
 <?php
 
-namespace Metrique\Plonk\Repositories\Contracts;
+namespace Metrique\Plonk\Repositories;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
-interface PlonkRepositoryInterface
+interface PlonkInterface
 {
+    /**
+     * Construct a plonk resource from a given hash id.
+     * @param  string  $hash
+     * @return Collection
+     */
+    public function resource(string $hash);
+    
     /**
      * Find a plonk asset by ID, and include all image varations.
      *
@@ -60,4 +67,12 @@ interface PlonkRepositoryInterface
      * @return mixed
      */
     public function unpublish($id);
+
+    /**
+     * Update PlonkAsset
+     * @param  integer $id
+     * @param  array $params
+     * @return mixed
+     */
+    public function update($id, $params);
 }

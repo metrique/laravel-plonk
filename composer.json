@@ -1,6 +1,6 @@
 {
     "name": "metrique/laravel-plonk",
-    "description": "Library for image management in Laravel 5.",
+    "description": "Library for image management in Laravel 5.4",
     "type": "Library",
     "license": "MIT",
     "authors": [
@@ -19,7 +19,16 @@
     },
     "require": {
         "intervention/image": "^2.3",
-        "league/flysystem-aws-s3-v3": "~1.0",
-        "sofa/eloquence": "^5.3"
+        "league/flysystem-aws-s3-v3": "~1.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Metrique\\Plonk\\PlonkServiceProvider"
+            ],
+            "aliases": {
+                "CDNify": "Metrique\\Plonk\\PlonkFacade"
+            }
+        }
     }
 }

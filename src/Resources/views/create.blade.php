@@ -1,64 +1,56 @@
 @extends('laravel-plonk::master')
 
-@section('content')
+@section('body')
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
 
-<div class="row">
-	<h1>Plonk</h1>
-	<ul class="breadcrumbs">
-		<li><a href="{{ route('plonk.index') }}">Index</a></li>
-		<li class="unavailable">Upload</li>
-	</ul>
+                <div class="card">
+                    <div class="card-header">Upload an image</div>
+                    <div class="card-body">
+                        <form class="form-horizontal" role="form" accept="image/gif, image/jpeg, image/png" method="POST" action="{{ route($routes['store']) }}" enctype="multipart/form-data">
+                            {{ csrf_field() }}
 
-	@if($errors->any())
-		<h3>Errors</h3>
-		<ul>
-		@foreach ($errors->all() as $error)
-			<li>{{ $error }}</li>
-		@endforeach
-		</ul>
-	@endif
-</div>
+                            <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }} row">
+                                <label for="file" class="col-md-4 col-form-label">File</label>
 
-<div class="row">
-	<div class="small-12">
-		<form action="{{ route('plonk.store') }}" method="POST" enctype="multipart/form-data" accept="image/gif, image/jpeg, image/png">
-			{!! csrf_field() !!}
-			<fieldset>
-				<legend>Upload</legend>
-				<div class="small-12">
-					<input type="hidden" name="data">
-					<input type="file" name="file">
-				</div>
+                                <div class="col-md-6">
+                                    <input type="hidden" name="data">
+                                    <input id="file" type="file" class="form-control" name="file" value="{{ old('file') }}" required autofocus>
 
-				<div class="small-12">
-					<label for="title">Title</label>
-					<input type="text" name="title" placeholder="Title" maxlength="255" value="{{ old('title') }}">
-				</div>
+                                    @if ($errors->has('file'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('file') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
 
-				<div class="small-12">
-					<label for="alt">Alt tag</label>
-					<input type="text" name="alt" placeholder="Alt" maxlength="255" value="{{ old('alt') }}">
-				</div>
+                            <div class="form-group row">
+                                <label for="title" class="col-md-4 col-form-label">Title</label>
+                                <div class="col-md-6">
+                                    <input class="form-control" type="text" name="title" maxlength="255" value="{{ old('title') }}">
+                                </div>
+                            </div>
 
-				<button type="submit"><i class="fa fa-lg fa-check"></i> Save</button>
-			</fieldset>
-		</form>
-	</div>
-</div>
+                            <div class="form-group row">
+                                <label for="alt" class="col-md-4 col-form-label">Alt tag</label>
+                                <div class="col-md-6">
+                                    <input class="form-control" type="text" name="alt" maxlength="255" value="{{ old('alt') }}">
+                                </div>
+                            </div>
 
-<div class="row">
-	<div class="small-12">
-		<div class="panel callout radius small">
-			<h4>Notes on ratios</h4>
-			<p>Plonk would like you to upload images with one of the following ratios.</p>
-			<ul>
-				@foreach ($ratios as $key => $value)
-					<li>{{ $key }}:{{ $value }}</li>
-				@endforeach
-			</ul>
-			<p>Plonk will process any image, regardless of ratio, and so it is expected that you will provde an image with a specific ratio if required.</p>
-		</div>
-	</div>
-</div>
-
+                            <div class="form-group row">
+                                <div class="col-md-8 offset-md-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        Upload
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

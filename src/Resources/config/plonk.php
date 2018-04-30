@@ -2,17 +2,32 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Route prefixes
+    | Route settings
     |--------------------------------------------------------------------------
     |
-    | Prefix the routes.
+    | Disable routes and configure url prefixes.
     |
     */
+    
+    'routes' => [
+        'api' => false,
+        'web' => true,
+    ],
+    
     'prefix' => [
         'api' => 'api',
         'web' => '',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Crop settings
+    |--------------------------------------------------------------------------
+    |
+    | Set crop settings, for limiting uploads to a certain ratio.
+    |
+    */
+   
     'crop' => [
         '1' => '1',
         '16' => '9',
@@ -30,8 +45,8 @@ return [
     | and validation when storing images to Plonk.
     |
     */
-
-   'query' => [
+   
+    'query' => [
         'filter' => [
             'search',
             'ratio',
@@ -40,7 +55,7 @@ return [
         'store' => [
             'ratio',
         ],
-   ],
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -50,7 +65,7 @@ return [
     | A list of allowed mime types that can be used with plonk.
     |
     */
-
+   
     'mime' => [
         'image/gif',
         'image/jpeg',
@@ -65,11 +80,16 @@ return [
     | Set the disk and paths that Plonk should use for storing images.
     |
     */
-
+   
+    'input' => [
+        'paths' => [
+            'base' => '/plonk',
+        ]
+    ],
     'output' => [
         'disk' => 's3',
         'paths' => [
-            'base' => '/plonk',
+            'base' => '/public/plonk',
             'originals' => '/originals',
         ]
     ],
@@ -98,30 +118,30 @@ return [
 
     'size' => [
         [
-            'name' => 'small',
+            'name' => 'xsmall',
             'width' => 640,
             'height' => 360,
             'quality' => 80,
         ],[
-            'name' => 'medium',
+            'name' => 'small',
             'width' => 1024,
             'height' => 576,
             'quality' => 70,
         ],[
-            'name' => 'large',
+            'name' => 'medium',
             'width' => 1440,
             'height' => 810,
+            'quality' => 70,
+        ],[
+            'name' => 'large',
+            'width' => 1920,
+            'height' => 1080,
             'quality' => 60,
         ],[
             'name' => 'xlarge',
-            'width' => 1920,
-            'height' => 1080,
+            'width' => 2560,
+            'height' => 1440,
             'quality' => 50,
-        ],[
-            'name' => 'high',
-            'width' => 1280,
-            'height' => 720,
-            'quality' => 80,
         ]
     ]
 ];

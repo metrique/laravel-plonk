@@ -15,16 +15,16 @@ class CreatePlonkAssets extends Migration
         Schema::create('plonk_assets', function (Blueprint $table) {
             $table->increments('id');
             $table->text('params')->nullable();
-            $table->string('hash', 255)->unique();
-            $table->string('title', 255)->nullable();
-            $table->string('alt', 255)->nullable();
+            $table->string('hash', 191)->unique();
+            $table->string('title', 191)->nullable();
+            $table->string('alt', 191)->nullable();
             $table->text('description')->nullable();
             $table->integer('width')->default(0);
             $table->integer('height')->default(0);
             $table->double('ratio')->default(0.00);
-            $table->string('orientation', 255)->default(0.00);
-            $table->string('extension', 255)->nullable();
-            $table->string('mime', 255)->nullable();
+            $table->string('orientation', 191)->default(0.00);
+            $table->string('extension', 191)->nullable();
+            $table->string('mime', 191)->nullable();
             $table->integer('published')->default(1);
             $table->timestamps();
         });

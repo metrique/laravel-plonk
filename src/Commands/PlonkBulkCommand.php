@@ -7,7 +7,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
 use RecursiveRegexIterator;
-use Metrique\Plonk\Repositories\Contracts\PlonkStoreRepositoryInterface as PlonkStoreRepository;
+use Metrique\Plonk\Repositories\PlonkStoreInterface;
 
 class PlonkBulkCommand extends Command
 {
@@ -40,7 +40,7 @@ class PlonkBulkCommand extends Command
     {
         parent::__construct();
 
-        $this->plonk = \App::make(PlonkStoreRepository::class);
+        $this->plonk = \App::make(PlonkStoreInterface::class);
     }
 
     /**

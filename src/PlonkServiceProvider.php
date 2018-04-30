@@ -5,21 +5,21 @@ namespace Metrique\Plonk;
 use Illuminate\Support\ServiceProvider;
 use Metrique\Plonk\Commands\PlonkMigrationsCommand;
 use Metrique\Plonk\Commands\PlonkBulkCommand;
-use Metrique\Plonk\Repositories\Contracts\HookRepositoryInterface;
-use Metrique\Plonk\Repositories\Contracts\PlonkRepositoryInterface;
-use Metrique\Plonk\Repositories\Contracts\PlonkStoreRepositoryInterface;
-use Metrique\Plonk\Repositories\HookRepository;
-use Metrique\Plonk\Repositories\PlonkRepositoryEloquent;
-use Metrique\Plonk\Repositories\PlonkStoreRepositoryEloquent;
-use Sofa\Eloquence\ServiceProvider as EloquenceServiceProvider;
+use Metrique\Plonk\Repositories\HookInterface;
+use Metrique\Plonk\Repositories\PlonkInterface;
+use Metrique\Plonk\Repositories\PlonkStoreInterface;
+use Metrique\Plonk\Repositories\Hook;
+use Metrique\Plonk\Repositories\Plonk;
+use Metrique\Plonk\Repositories\PlonkStore;
+use Metrique\Plonk\PlonkViewComposer;
 
 class PlonkServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
+    * Indicates if loading of the provider is deferred.
+    *
+    * @var bool
+    */
     protected $defer = false;
 
     public function __construct($app)
@@ -28,32 +28,33 @@ class PlonkServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap the application services.
-     */
+    * Bootstrap the application services.
+    */
     public function boot()
     {
+        $this->bootAssets();
         $this->bootCommands();
         $this->bootConfig();
         $this->bootMigrations();
         $this->bootRoutes();
         $this->bootViews();
+
+        // View composer
+        view()->composer('*', PlonkViewComposer::class);
     }
 
     /**
-     * Register the application services.
-     */
+    * Register the application services.
+    */
     public function register()
     {
         // Repositories
-        $this->registerHookRepository();
-        $this->registerPlonkIndexRepository();
-        $this->registerPlonkStoreRepository();
+        $this->registerHook();
+        $this->registerPlonk();
+        $this->registerPlonkStore();
 
         // Commands
         $this->registerCommands();
-
-        // Eloquence
-        $this->registerEloquence();
     }
 
     public function bootCommands()
@@ -81,48 +82,61 @@ class PlonkServiceProvider extends ServiceProvider
     public function bootRoutes()
     {
         if (! $this->app->routesAreCached()) {
-            require __DIR__.'/Routes/api.php';
-            require __DIR__.'/Routes/web.php';
+            // TODO
+            if (config('plonk.routes.api')) {
+                require __DIR__.'/Routes/api.php';
+            }
+
+            if (config('plonk.routes.web')) {
+                require __DIR__.'/Routes/web.php';
+            }
         }
     }
 
     public function bootViews()
     {
-        $this->loadViewsFrom(__DIR__.'/Resources/views/', 'laravel-plonk');
+        $views = __DIR__ . '/Resources/views/';
+        $this->loadViewsFrom($views, 'laravel-plonk');
+
+        $this->publishes([
+            __DIR__.'/Resources/views' => resource_path('views/vendor/laravel-plonk'),
+        ], 'laravel-plonk');
     }
 
-    public function registerEloquence()
+    public function bootAssets()
     {
-        $this->app->register(EloquenceServiceProvider::class);
+        $this->publishes([
+            __DIR__.'/Resources/assets' => resource_path('assets/vendor/laravel-plonk'),
+        ], 'laravel-plonk');
     }
 
-    protected function registerHookRepository()
+    protected function registerHook()
     {
         $this->app->bind(
-            HookRepositoryInterface::class,
-            HookRepository::class
+            HookInterface::class,
+            Hook::class
         );
     }
 
-    public function registerPlonkIndexRepository()
+    public function registerPlonk()
     {
         $this->app->bind(
-            PlonkRepositoryInterface::class,
-            PlonkRepositoryEloquent::class
+            PlonkInterface::class,
+            Plonk::class
         );
     }
 
-    public function registerPlonkStoreRepository()
+    public function registerPlonkStore()
     {
         $this->app->bind(
-            PlonkStoreRepositoryInterface::class,
-            PlonkStoreRepositoryEloquent::class
+            PlonkStoreInterface::class,
+            PlonkStore::class
         );
     }
 
     /**
-     * Register the artisan commands.
-     */
+    * Register the artisan commands.
+    */
     public function registerCommands()
     {
         $this->app->singleton('command.metrique.plonk-bulk', function ($app) {

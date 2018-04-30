@@ -15,17 +15,26 @@ class Plonk implements PlonkInterface
      */
     public function resource(string $hash)
     {
-        $signature = sprintf('%s::%s %s', __CLASS__, __FUNCTION__, $hash);
+        if (config('plonk.cache', false)) {
+            $signature = sprintf('%s::%s %s', __CLASS__, __FUNCTION__, $hash);
+            
+            return cache()->remember(sha1($signature), $this->cacheTtl, function () use ($hash) {
+                return $this->fetchResource($hash);
+            });
+        }
+        
+        return $this->fetchResource($hash);
+    }
+    
+    private function fetchResource($hash)
+    {
+        $resource = $this->findByHash($hash);
 
-        return cache()->remember(sha1($signature), $this->cacheTtl, function () use ($hash) {
-            $resource = $this->findByHash($hash);
+        if (is_null($resource)) {
+            return false;
+        }
 
-            if (is_null($resource)) {
-                return false;
-            }
-
-            return $resource->resource;
-        });
+        return $resource->resource;
     }
 
     /**

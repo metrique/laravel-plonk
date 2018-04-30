@@ -74,13 +74,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Output
+    | Storage
     |--------------------------------------------------------------------------
     |
     | Set the disk and paths that Plonk should use for storing images.
     |
     */
-   
+    'cache' => true,
     'input' => [
         'paths' => [
             'base' => '/plonk',

@@ -52,8 +52,29 @@ class PlonkAsset extends Model
         return $this->hasMany(PlonkVariation::class, 'plonk_assets_id');
     }
 
-    public function getResourceAttribute()
+        public function getResourceAttribute()
     {
+        $variations = $this->variations->mapWithKeys(function ($item, $key) {
+            return  [
+                $item['name'] => [
+                    'path' => implode('/', [
+                        rtrim(config('plonk.input.paths.base'), '/'),
+                        str_limit($this->hash, 4),
+                        sprintf('%s-%s.%s', $this->hash, $item['name'], $this->extension)
+                    ]),
+                    'width' => $item['width'],
+                    'height' => $item['height'],
+                    'quality' => $item['quality']
+                ]
+            ];
+        });
+        
+        $sizes = $variations->mapWithKeys(function ($item, $key) {
+            return [
+                'size.'.$key => $item['path']
+            ];
+        });
+        
         return collect($this->attributes)->only([
             'title',
             'alt',
@@ -63,24 +84,10 @@ class PlonkAsset extends Model
             'ratio',
             'width',
         ])->merge([
-            'variations' => $this->variations->mapWithKeys(function ($item, $key) {
-                return  [
-                    $item['name'] => [
-                        'path' => implode('/', [
-                            rtrim(config('plonk.input.paths.base'), '/'),
-                            str_limit($this->hash, 4),
-                            sprintf('%s-%s.%s', $this->hash, $item['name'], $this->extension)
-                        ]),
-                        'width' => $item['width'],
-                        'height' => $item['height'],
-                        'quality' => $item['quality']
-                    ]
-                ];
-            })->toArray()
-        ])->merge([
+            'variations' => $variations->toArray(),
             'smallest' => $this->getSmallAttribute(),
             'largest' => $this->getLargeAttribute(),
-        ]);
+        ])->merge($sizes);
     }
 
     public function getSmallAttribute()

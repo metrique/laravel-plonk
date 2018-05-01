@@ -29,7 +29,15 @@ interface PlonkInterface
      * @return mixed
      */
     public function findByHash($hash);
-
+    
+    /**
+     * Returns if the plonk asset hash exists.
+     *
+     * @param  string $hash
+     * @return boolean
+     */
+    public function hashExists($hash);
+    
     /**
      * Clean any unwanted parameters from the query string.
      *

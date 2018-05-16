@@ -7,13 +7,16 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Exception\NotReadableException;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
+use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Metrique\Plonk\Eloquent\PlonkAsset;
 use Metrique\Plonk\Eloquent\PlonkVariation;
 use Metrique\Plonk\Exceptions\PlonkException;
 use Metrique\Plonk\Support\PlonkOrientation;
 use Metrique\Plonk\Support\PlonkMime;
 use Metrique\Plonk\Repositories\PlonkStoreInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+// use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PlonkStore implements PlonkStoreInterface
 {
@@ -56,11 +59,10 @@ class PlonkStore implements PlonkStoreInterface
 
     protected function validateFile()
     {
-        $this->file = request()->file($this->name);
-
+        $this->file = request()->file;
         $validMime = collect(config('plonk.mime'))->contains($this->file->getMimeType());
-        $validFile = $this->file->isValid();
 
+        $validFile = $this->file->isValid();
         return $validMime & $validFile;
     }
     
@@ -106,7 +108,7 @@ class PlonkStore implements PlonkStoreInterface
         request()->files->replace([
             'file' => $this->file
         ]);
-
+        
         fclose($fileHandler);
         unset($file);
     }
@@ -119,6 +121,36 @@ class PlonkStore implements PlonkStoreInterface
         
         $images = $this->resizeImages();
         $this->persist($images);
+    }
+    
+    public function storeCli($path, $title, $alt)
+    {
+        // $this->imageManager = new ImageManager();
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        
+        $uploadedFile = new UploadedFile(
+            $path,
+            basename($path),
+            finfo_file($finfo, $path),
+            filesize($path),
+            null,
+            true
+        );
+        
+        request()->files->replace([
+            $this->name => $uploadedFile
+        ]);
+
+        request()->merge([
+            'title' => $title,
+            'alt' => $alt,
+        ]);
+        
+        unset($uploadedFile);
+        unset($finfo);
+        
+        return $this->store();
     }
 
     public function resizeImages()

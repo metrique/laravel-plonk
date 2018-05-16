@@ -25,11 +25,19 @@ interface PlonkInterface
     /**
      * Find a plonk asset by Hash, and inlcude all image varations.
      *
-     * @param  integer  $hash
+     * @param  string  $hash
      * @return mixed
      */
     public function findByHash($hash);
-
+    
+    /**
+     * Returns if the plonk asset hash exists.
+     *
+     * @param  string $hash
+     * @return boolean
+     */
+    public function hashExists($hash);
+    
     /**
      * Clean any unwanted parameters from the query string.
      *

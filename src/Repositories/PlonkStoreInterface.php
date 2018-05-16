@@ -27,6 +27,13 @@ interface PlonkStoreInterface
      * @return bool
      */
     public function store();
+    
+    /**
+     * Create and persist the images to file system & create their entries in the database.
+     *
+     * @return bool
+     */
+    public function storeCli($path, $title, $alt);
 
     /**
      * Resize the images and return each size as data held in an array.

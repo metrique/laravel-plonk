@@ -55,6 +55,14 @@ class Plonk implements PlonkInterface
             'hash' => $hash
         ])->first();
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function hashExists($hash)
+    {
+        return (bool) PlonkAsset::where('hash', $hash)->first();
+    }
 
     /**
      * {@inheritdoc}

@@ -59,7 +59,10 @@ class PlonkStore implements PlonkStoreInterface
 
     protected function validateFile()
     {
-        $this->file = request()->file;
+        if (!isset($this->file)) {
+            $this->file = request()->file($this->name);
+        }
+        
         $validMime = collect(config('plonk.mime'))->contains($this->file->getMimeType());
 
         $validFile = $this->file->isValid();
@@ -115,6 +118,9 @@ class PlonkStore implements PlonkStoreInterface
 
     public function store()
     {
+        $this->hash = null;
+        $this->orientation = null;
+        
         if (!$this->validates()) {
             return false;
         }
@@ -138,10 +144,8 @@ class PlonkStore implements PlonkStoreInterface
             true
         );
         
-        request()->files->replace([
-            $this->name => $uploadedFile
-        ]);
-
+        $this->file = $uploadedFile;
+        
         request()->merge([
             'title' => $title,
             'alt' => $alt,
@@ -254,16 +258,16 @@ class PlonkStore implements PlonkStoreInterface
     
     public function getHash()
     {
-        if (!isset($this->hash)) {
+        if (is_null($this->hash)) {
             $this->hash = hash_file('sha256', $this->file->getRealPath());
         }
-        
+
         return $this->hash;
     }
     
     public function getOrientation()
     {
-        if (!isset($this->orientation)) {
+        if (is_null($this->orientation)) {
             $this->orientation = PlonkOrientation::determine($this->image->width(), $this->image->height());
         }
         

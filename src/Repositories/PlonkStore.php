@@ -127,6 +127,8 @@ class PlonkStore implements PlonkStoreInterface
         
         $images = $this->resizeImages();
         $this->persist($images);
+        
+        return $this->getHash();
     }
     
     public function storeCli($path, $title, $alt)

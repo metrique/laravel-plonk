@@ -5,7 +5,9 @@ namespace Metrique\Plonk\Http\Controllers\Api;
 use Illuminate\Http\Request;
 
 use Metrique\Plonk\Http\Controllers\PlonkBaseController;
+use Metrique\Plonk\Http\Requests\PlonkStoreRequest;
 use Metrique\Plonk\Repositories\PlonkInterface as Plonk;
+use Metrique\Plonk\Repositories\PlonkStoreInterface as PlonkStore;
 
 class PlonkController extends PlonkBaseController
 {
@@ -23,5 +25,12 @@ class PlonkController extends PlonkBaseController
             ->appends($plonk->filterRequest()->toArray());
 
         return $assets;
+    }
+
+    public function store(PlonkStoreRequest $request, PlonkStore $plonk)
+    {
+        $plonk->store();
+
+        return response()->json(true);
     }
 }

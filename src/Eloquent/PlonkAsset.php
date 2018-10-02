@@ -71,7 +71,7 @@ class PlonkAsset extends Model
         
         $sizes = $variations->mapWithKeys(function ($item, $key) {
             return [
-                'size.'.$key => config('plonk.url') . $item['path']
+                'size_'.$key => config('plonk.url') . $item['path']
             ];
         });
         

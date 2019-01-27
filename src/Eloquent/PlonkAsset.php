@@ -68,13 +68,13 @@ class PlonkAsset extends Model
                 ]
             ];
         });
-        
+
         $sizes = $variations->mapWithKeys(function ($item, $key) {
             return [
-                'size.'.$key => config('plonk.url') . $item['path']
+                'variation_'.$key => $item['path']
             ];
         });
-        
+
         return collect($this->attributes)->only([
             'title',
             'alt',

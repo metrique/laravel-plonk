@@ -3,13 +3,10 @@
 namespace Metrique\Plonk\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
 use Metrique\Plonk\Eloquent\PlonkVariation;
 
 class PlonkAsset extends Model
 {
-    use Searchable;
-
     protected $appends = [
         'resource',
         'small',
@@ -31,21 +28,6 @@ class PlonkAsset extends Model
         'ratio',
         'published'
     ];
-
-    /**
-     * Get the indexable data array for the model.
-     *
-     * @return array
-     */
-    public function toSearchableArray()
-    {
-        return [
-            'id' => $this->getKey(),
-            'title' => $this->title,
-            'alt' => $this->alt,
-            'description' => $this->description,
-        ];
-    }
 
     public function variations()
     {

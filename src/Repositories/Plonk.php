@@ -17,15 +17,15 @@ class Plonk implements PlonkInterface
     {
         if (config('plonk.cache', false)) {
             $signature = sprintf('%s::%s %s', __CLASS__, __FUNCTION__, $hash);
-            
+
             return cache()->remember(sha1($signature), $this->cacheTtl, function () use ($hash) {
                 return $this->fetchResource($hash);
             });
         }
-        
+
         return $this->fetchResource($hash);
     }
-    
+
     private function fetchResource($hash)
     {
         $resource = $this->findByHash($hash);
@@ -55,7 +55,7 @@ class Plonk implements PlonkInterface
             'hash' => $hash
         ])->first();
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -94,7 +94,12 @@ class Plonk implements PlonkInterface
 
             switch ($key) {
                 case 'search':
-                    $search = PlonkAsset::search($value)->get()->pluck(['id']);
+                    $search = PlonkAsset::where('title', 'like', "{$value}%")
+                        ->orWhere('alt', 'like', "{$value}%")
+                        ->orWhere('description', 'like', "{$value}%")
+                        ->get()
+                        ->pluck(['id']);
+
                     $plonkAsset->whereIn('id', $search);
                     break;
 

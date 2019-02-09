@@ -1,4 +1,4 @@
-@extends('laravel-plonk::master')
+@extends('laravel-plonk::main')
 
 @section('content')
 

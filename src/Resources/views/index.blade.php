@@ -1,93 +1,71 @@
-@extends('laravel-plonk::master')
+@extends('laravel-plonk::main')
 
-@section('body')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
+@section('content')
+    @constituent('laravel-building::partial.resource-page-title', [
+        'icon' => 'fas fa-fw fa-images',
+        'title' => 'Images'
+    ])
 
-                <div class="row">
-                    <div class="col-md-8">
-                        <form action="{{ request()->url() }}" class="form-inline" method="GET">
-                            <div class="form-group">
-                                <input class="form-control" type="text" name="search" placeholder="Search..." value="{{ request()->query('search') }}">
-                            </div>
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Search</button>
-                            @if(request()->has('search'))
-                                <a href="{{ route($routes['index']) }}"><i class="fa fa-times"></i> Clear search</a>
-                            @endif
-                        </form>
-                    </div>
-                    <div class="col-md-4">
-                        <p class="text-right">
-                            <a href="{{ route($routes['create']) }}" class="btn btn-primary">
-                                Upload an image
-                            </a>
-                        </p>
-                    </div>
+    <div class="row justify-content-center my-4">
+        <div class="col-md-8 d-flex justify-content-between">
+            <form action="{{ request()->url() }}" class="form-inline" method="GET">
+                <div class="form-group">
+                    <input class="form-control" type="text" name="search" placeholder="Search..." value="{{ request()->query('search') }}">
                 </div>
-
-                @if(count($assets) < 1)
-                    <p>No images found. <a href="{{ route($routes['create']) }}">Upload an image.</a></p>
-                @else
+                <button type="submit" class="btn btn-primary ml-2">
+                    <i class="fa fa-search"></i> Search
+                </button>
+                
+                @if(request()->has('search'))
+                    <a class="ml-2" href="{{ route($routes['index']) }}">
+                        <i class="fa fa-times"></i> Clear search
+                    </a>
                 @endif
+            </form>
 
-                @foreach ($assets as $key => $value)
+            @constituent('laravel-building::partial.resource-create-button', [
+                'icon' => 'fas fa-fw fa-plus',
+                'title' => 'Upload a new image',
+                'route' => route($routes['create'])
+            ])
+        </div>
+    </div>
+    
+    <div class="row justify-content-center mb4">
+        <div class="col-md-8">
+            @if(count($assets) < 1)
+                <p>No images found. <a href="{{ route($routes['create']) }}">Upload a new image.</a></p>
+            @endif
 
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    {{ $value->title }}
-                                </div>
-                                <div class="col-md-4 text-right">
-                                    <form method="POST" action="{{ route($routes['destroy'], $value->id) }}">
-                                        {!! csrf_field() !!}
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <button type="submit" class="btn btn-xs btn-danger" data-role="destroy">
-                                            <i class="fa fa-fw fa-trash"></i>
-                                            Delete
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <img src="{{ $plonk->resource($value->hash)->get('smallest') }}" width="100%" class="img-rounded img-responsive">
-                        </div>
-
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <i class="fa fa-fw fa-id-card-o"></i> ID
-                                <code>{{ $value->hash }}</code>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <i class="fa fa-fw fa-link"></i> Small
-                                        <code>{{ $plonk->resource($value->hash)->get('smallest') }}</code>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <i class="fa fa-fw fa-link"></i> Large
-                                        <code>{{ $plonk->resource($value->hash)->get('largest') }}</code>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="{{ route($routes['edit'], $value->id) }}">
-                                    <i class="fa fa-fw fa-tag" aria-hidden="true"></i>
-                                    Edit tags
-                                </a>
-                            </li>
-                        </ul>
-
-                    </div>
-                @endforeach
-
-                <div class="row text-center">
-                    {!! $assets->links() !!}
-                </div>
-
-            </div>
+            @foreach ($assets as $key => $value)
+                
+                <img src="{{ $plonk->resource($value->hash)->get('smallest') }}" width="100%" class="img-thumbnail mb-4">
+                
+                @constituent('laravel-building::partial.list-group', [
+                    'icon' => 'fa fa-fw fa-image',
+                    'title' => sprintf('%s', $value->title),
+                    'destroy' => route($routes['destroy'], $value->id),
+                    'items' => [
+                        [
+                            'title' => $value->hash,
+                            'icon' => 'fas fa-fw fa-fingerprint',
+                            // 'route' => '/'. str_replace('_', '/', $page->hash),
+                        ],[
+                            'title' => sprintf('
+                                <a href="%s"><i class="fas fa-xs fa-image"></i> Small image</a>
+                                <a class="ml-4" href="%s"><i class="fas fa-image"></i> Large image</a>',
+                                $plonk->resource($value->hash)->get('smallest'),
+                                $plonk->resource($value->hash)->get('largest'),
+                            ),
+                            'icon' => null,
+                        ],[
+                            'title' => 'Edit tags',
+                            'icon' => 'fas fa-cog',
+                            'route' => route($routes['edit'], $value->id) 
+                        ]
+                    ]
+                ])
+            @endforeach
         </div>
     </div>
 @endsection

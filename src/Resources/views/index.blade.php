@@ -39,7 +39,7 @@
 
             @foreach ($assets as $key => $value)
                 
-                <img src="{{ $plonk->resource($value->hash)->get('smallest') }}" width="100%" class="img-thumbnail mb-4">
+                <img src="{{ config('plonk.url', '') . $plonk->resource($value->hash)->get('smallest') }}" width="100%" class="img-thumbnail mb-4">
                 
                 @constituent('laravel-building::partial.list-group', [
                     'icon' => 'fa fa-fw fa-image',

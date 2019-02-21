@@ -55,7 +55,7 @@
                                 <a href="%s"><i class="fas fa-xs fa-image"></i> Small image</a>
                                 <a class="ml-4" href="%s"><i class="fas fa-image"></i> Large image</a>',
                                 $plonk->resource($value->hash)->get('smallest'),
-                                $plonk->resource($value->hash)->get('largest'),
+                                $plonk->resource($value->hash)->get('largest')
                             ),
                             'icon' => null,
                         ],[

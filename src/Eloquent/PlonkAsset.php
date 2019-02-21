@@ -88,6 +88,7 @@ class PlonkAsset extends Model
         }
 
         return implode('/', [
+            config('plonk.url', ''),
             rtrim(config('plonk.input.paths.base'), '/'),
             str_limit($this->hash, 4),
             sprintf('%s-%s.%s', $this->hash, $select->name, $this->extension)
@@ -110,6 +111,7 @@ class PlonkAsset extends Model
         }
 
         return implode('/', [
+            config('plonk.url', ''),
             rtrim(config('plonk.input.paths.base'), '/'),
             str_limit($this->hash, 4),
             sprintf('%s-%s.%s', $this->hash, $select->name, $this->extension)

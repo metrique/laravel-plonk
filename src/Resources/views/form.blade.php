@@ -1,5 +1,5 @@
 @if($edit)
-    <img src="{{ $plonk->resource($asset->hash)->get('smallest') }}" width="100%" class="img-thumbnail mb-4">
+    <img src="{{ config('plonk.url', '') . $plonk->resource($asset->hash)->get('smallest') }}" width="100%" class="img-thumbnail mb-4">
 @endif
 
 <div class="card">

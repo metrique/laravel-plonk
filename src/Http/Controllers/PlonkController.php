@@ -45,7 +45,7 @@ class PlonkController extends PlonkBaseController
             'assets' => $assets,
             'routes' => $this->routes,
         ]);
-
+        
         return $this->viewWithData($this->views['index']);
     }
 

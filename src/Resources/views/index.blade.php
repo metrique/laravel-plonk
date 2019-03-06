@@ -36,10 +36,9 @@
             @if(count($assets) < 1)
                 <p>No images found. <a href="{{ route($routes['create']) }}">Upload a new image.</a></p>
             @endif
-
+            
             @foreach ($assets as $key => $value)
-                
-                <img src="{{ $plonk->resource($value->hash)->get('smallest') }}" width="100%" class="img-thumbnail mb-4">
+                <img src="{{ config('plonk.url', '') . $plonk->resource($value->hash)->get('smallest') }}" width="100%" class="img-thumbnail mb-4">
                 
                 @constituent('laravel-building::partial.list-group', [
                     'icon' => 'fa fa-fw fa-image',
@@ -54,8 +53,8 @@
                             'title' => sprintf('
                                 <a href="%s"><i class="fas fa-xs fa-image"></i> Small image</a>
                                 <a class="ml-4" href="%s"><i class="fas fa-image"></i> Large image</a>',
-                                $plonk->resource($value->hash)->get('smallest'),
-                                $plonk->resource($value->hash)->get('largest'),
+                                config('plonk.url', '') . $plonk->resource($value->hash)->get('smallest'),
+                                config('plonk.url', '') . $plonk->resource($value->hash)->get('largest')
                             ),
                             'icon' => null,
                         ],[
@@ -66,6 +65,8 @@
                     ]
                 ])
             @endforeach
+            
+            {{ $assets->links() }}
         </div>
     </div>
 @endsection

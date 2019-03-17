@@ -1,7 +1,7 @@
 @extends('laravel-plonk::main')
 
 @section('content')
-    @constituent('laravel-building::partial.resource-page-title', [
+    @constituent('laravel-plonk::partial.resource-page-title', [
         'icon' => 'fas fa-fw fa-images',
         'title' => 'Images'
     ])

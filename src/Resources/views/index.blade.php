@@ -23,7 +23,7 @@
                 @endif
             </form>
 
-            @constituent('laravel-building::partial.resource-create-button', [
+            @constituent('laravel-plonk::partial.resource-create-button', [
                 'icon' => 'fas fa-fw fa-plus',
                 'title' => 'Upload a new image',
                 'route' => route($routes['create'])
@@ -40,7 +40,7 @@
             @foreach ($assets as $key => $value)
                 <img src="{{ config('plonk.url', '') . $plonk->resource($value->hash)->get('smallest') }}" width="100%" class="img-thumbnail mb-4">
                 
-                @constituent('laravel-building::partial.list-group', [
+                @constituent('laravel-plonk::partial.list-group', [
                     'icon' => 'fa fa-fw fa-image',
                     'title' => sprintf('%s', $value->title),
                     'destroy' => route($routes['destroy'], $value->id),

@@ -34,10 +34,10 @@
                     )
                 }}
                 <label for="{{ $attributes['id'] ?? $name }}">
-                    {{ ucfirst(str_replace('_', ' ', $label ?? $name)) }}
                     @if($tooltip ?? false)
                         <a href="#" data-toggle="tooltip" title="{{ $tooltip }}">i</a>
                     @endif
+                    {{ ucfirst(str_replace('_', ' ', $label ?? $name)) }}
                 </label>
             </div>
             @break

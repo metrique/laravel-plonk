@@ -7,7 +7,7 @@
     ])
     
     <div class="row justify-content-center">
-        <div class="col-md-8 ">
+        <div class="col-md-8">
             @include('laravel-plonk::form', [
                 'action' => route($routes['update'], $asset->id),
                 'edit' => true,

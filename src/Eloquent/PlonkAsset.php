@@ -3,6 +3,7 @@
 namespace Metrique\Plonk\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Metrique\Plonk\Eloquent\PlonkVariation;
 
 class PlonkAsset extends Model
@@ -41,7 +42,7 @@ class PlonkAsset extends Model
                 $item['name'] => [
                     'path' => implode('/', [
                         rtrim(config('plonk.input.paths.base'), '/'),
-                        str_limit($this->hash, 4),
+                        Str::limit($this->hash, 4),
                         sprintf('%s-%s.%s', $this->hash, $item['name'], $this->extension)
                     ]),
                     'width' => $item['width'],
@@ -89,7 +90,7 @@ class PlonkAsset extends Model
 
         return implode('/', [
             rtrim(config('plonk.input.paths.base'), ''),
-            str_limit($this->hash, 4),
+            Str::limit($this->hash, 4),
             sprintf('%s-%s.%s', $this->hash, $select->name, $this->extension)
         ]);
     }
@@ -108,10 +109,10 @@ class PlonkAsset extends Model
         if (!isset($select)) {
             return null;
         }
-        
+
         return implode('/', [
             rtrim(config('plonk.input.paths.base'), ''),
-            str_limit($this->hash, 4),
+            Str::limit($this->hash, 4),
             sprintf('%s-%s.%s', $this->hash, $select->name, $this->extension)
         ]);
     }

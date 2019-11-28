@@ -7,6 +7,7 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Exception\NotReadableException;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Metrique\Plonk\Eloquent\PlonkAsset;
@@ -53,7 +54,7 @@ class PlonkStore implements PlonkStoreInterface
         if (request()->has('data')) {
             $this->makeFileFromData();
         }
-        
+
         return $this->validateFile() & $this->validateImage();
     }
 
@@ -62,13 +63,13 @@ class PlonkStore implements PlonkStoreInterface
         if (!isset($this->file)) {
             $this->file = request()->file($this->name);
         }
-        
+
         $validMime = collect(config('plonk.mime'))->contains($this->file->getMimeType());
 
         $validFile = $this->file->isValid();
         return $validMime & $validFile;
     }
-    
+
     protected function validateImage()
     {
         try {
@@ -80,7 +81,7 @@ class PlonkStore implements PlonkStoreInterface
 
         return true;
     }
-    
+
     public function makeFileFromData()
     {
         $fileContent = base64_decode(
@@ -94,7 +95,7 @@ class PlonkStore implements PlonkStoreInterface
         if (!$fileContent) {
             return false;
         }
-        
+
         $file = tempnam(sys_get_temp_dir(), 'Plonk');
         $fileHandler = fopen($file, 'w');
         fwrite($fileHandler, $fileContent);
@@ -111,7 +112,7 @@ class PlonkStore implements PlonkStoreInterface
         request()->files->replace([
             'file' => $this->file
         ]);
-        
+
         fclose($fileHandler);
         unset($file);
     }
@@ -120,23 +121,23 @@ class PlonkStore implements PlonkStoreInterface
     {
         $this->hash = null;
         $this->orientation = null;
-        
+
         if (!$this->validates()) {
             return false;
         }
-        
+
         $images = $this->resizeImages();
         $this->persist($images);
-        
+
         return $this->getHash();
     }
-    
+
     public function storeCli($path, $title, $alt)
     {
         // $this->imageManager = new ImageManager();
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        
+
         $uploadedFile = new UploadedFile(
             $path,
             basename($path),
@@ -145,17 +146,17 @@ class PlonkStore implements PlonkStoreInterface
             null,
             true
         );
-        
+
         $this->file = $uploadedFile;
-        
+
         request()->merge([
             'title' => $title,
             'alt' => $alt,
         ]);
-        
+
         unset($uploadedFile);
         unset($finfo);
-        
+
         return $this->store();
     }
 
@@ -165,7 +166,7 @@ class PlonkStore implements PlonkStoreInterface
 
         collect(config('plonk.size'))->each(function ($value, $key) use ($images) {
             $image = $this->image;
-            
+
             $image->backup();
             $image->orientate();
 
@@ -257,7 +258,7 @@ class PlonkStore implements PlonkStoreInterface
             ]);
         });
     }
-    
+
     public function getHash()
     {
         if (is_null($this->hash)) {
@@ -266,16 +267,16 @@ class PlonkStore implements PlonkStoreInterface
 
         return $this->hash;
     }
-    
+
     public function getOrientation()
     {
         if (is_null($this->orientation)) {
             $this->orientation = PlonkOrientation::determine($this->image->width(), $this->image->height());
         }
-        
+
         return $this->orientation;
     }
-    
+
     public function getOriginalPath()
     {
         $base = rtrim(config('plonk.output.paths.base'), '/');
@@ -284,13 +285,13 @@ class PlonkStore implements PlonkStoreInterface
 
         return implode('/', [$base, $original, $this->getHash().$extension]);
     }
-    
+
     public function getVariationPath($name)
     {
         $base = rtrim(config('plonk.output.paths.base'), '/');
         $original = trim(config('plonk.output.paths.originals'), '/');
         $extension = '.' . PlonkMime::toExtension($this->file->getClientMimeType());
 
-        return implode('/', [$base, str_limit($this->getHash(), 4), $this->getHash().'-'.str_slug($name).$extension]);
+        return implode('/', [$base, Str::limit($this->getHash(), 4), $this->getHash().'-'.str_slug($name).$extension]);
     }
 }

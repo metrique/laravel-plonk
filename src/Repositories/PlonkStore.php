@@ -8,6 +8,7 @@ use Intervention\Image\Exception\NotReadableException;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Metrique\Plonk\Eloquent\PlonkAsset;

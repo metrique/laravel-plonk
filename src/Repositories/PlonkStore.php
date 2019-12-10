@@ -293,6 +293,6 @@ class PlonkStore implements PlonkStoreInterface
         $original = trim(config('plonk.output.paths.originals'), '/');
         $extension = '.' . PlonkMime::toExtension($this->file->getClientMimeType());
 
-        return implode('/', [$base, Str::limit($this->getHash(), 4), $this->getHash().'-'.str_slug($name).$extension]);
+        return implode('/', [$base, Str::limit($this->getHash(), 4), $this->getHash().'-'.Str::slug($name).$extension]);
     }
 }
